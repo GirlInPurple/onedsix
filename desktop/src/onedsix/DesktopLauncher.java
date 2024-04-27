@@ -2,16 +2,15 @@ package onedsix;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import onedsix.util.Logger;
 
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {
-	private static final Logger L = LoggerFactory.getLogger(DesktopLauncher.class);
+	private static final Logger L = new Logger(DesktopLauncher.class);
 	
 	public static void main(String[] args) {
-		L.info("Starting Lwjgl3...");
+		L.print("Starting Lwjgl3...");
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 
 		// Moved splash text to core/src/OneDSix line 80
@@ -21,5 +20,6 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 
 		Lwjgl3Application l3a = new Lwjgl3Application(new OneDSix(), config);
+		L.print("Stopped Lwjgl3!");
 	}
 }

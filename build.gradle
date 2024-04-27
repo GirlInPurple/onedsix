@@ -35,7 +35,6 @@ allprojects {
         gradlePluginPortal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-        maven { url "https://repo.spongepowered.org/repository/maven-public/" }
         maven { url "https://jitpack.io" }
     }
 }
@@ -95,17 +94,11 @@ project(":core") {
         // SVG
         implementation "com.github.weisj:jsvg:1.4.0"
 
-        // SLF4J
-        implementation "org.slf4j:slf4j-api:1.7.32"
-        implementation "ch.qos.logback:logback-classic:1.2.6"
-
         // JavaScript
         implementation 'org.openjdk.nashorn:nashorn-core:15.4'
 
         // Other Utils
         compileOnly "org.jetbrains:annotations:23.0.0"
-        implementation "org.projectlombok:lombok:1.18.26"
-        annotationProcessor "org.projectlombok:lombok:1.18.26"
         implementation 'org.apache.commons:commons-lang3:3.14.0'
 
         // Mixin/Modding
@@ -113,11 +106,13 @@ project(":core") {
         implementation "org.ow2.asm:asm-commons:$asm_version"
         implementation "org.ow2.asm:asm-util:$asm_version"
         implementation "org.ow2.asm:asm-tree:$asm_version"
-        implementation 'org.spongepowered:mixin:0.8.5'
         implementation "net.bytebuddy:byte-buddy:$byte_buddy_version"
-        implementation "com.google.guava:guava:33.1.0-jre"
-        implementation "com.github.Chocohead:Fabric-ASM:v2.3"
     }
+}
+
+project(":examplemod") {
+    apply plugin: "java-library"
+    // Look inside ExampleMod's specific build.gradle for more info
 }
 
 project(":desktop") {
@@ -125,11 +120,6 @@ project(":desktop") {
 
     dependencies {
         implementation project(":core")
-
-        // SLF4J
-        // Yes, it overlaps with the version in Core, but a weird bug is stopping it from transferring over
-        implementation "org.slf4j:slf4j-api:1.7.32"
-        implementation "ch.qos.logback:logback-classic:1.2.6"
 
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"

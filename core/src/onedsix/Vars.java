@@ -8,10 +8,10 @@ import com.badlogic.gdx.graphics.g3d.decals.*;
 import com.badlogic.gdx.graphics.g3d.utils.*;
 import com.badlogic.gdx.math.Vector3;
 import com.google.gson.Gson;
-import onedsix.gen.handling.DatagenHandler;
+import onedsix.gen.DatagenHandler;
 import onedsix.graphics.GeometryHandler;
 import onedsix.util.KeyCalls;
-import onedsix.util.LoggerUtils.*;
+import onedsix.util.Logger.*;
 
 import java.util.*;
 

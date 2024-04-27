@@ -1,15 +1,12 @@
 package onedsix.gen.assets;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.LinkedList;
 import java.util.Objects;
 
 public class Dialog {
     
-    @Getter private final LinkedList<DialogSnippet> dialogSnippets;
-    @Getter @Setter private LinkedList<String> pastIDs;
+    public final LinkedList<DialogSnippet> dialogSnippets;
+    public LinkedList<String> pastIDs;
     
     public Dialog(LinkedList<DialogSnippet> dialogSnippets, LinkedList<String> pastIDs) {
         this.dialogSnippets = dialogSnippets;
@@ -19,7 +16,7 @@ public class Dialog {
     public DialogSnippet accessDialog(String ID, boolean shouldTrack) {
         DialogSnippet out = null;
         for (DialogSnippet ds : this.dialogSnippets) {
-            if (Objects.equals(ID, ds.getID())) {
+            if (Objects.equals(ID, ds.ID)) {
                 out = ds;
                 if (shouldTrack) {
                     pastIDs.add(ID);
@@ -35,9 +32,9 @@ public class Dialog {
     
     public static class DialogSnippet {
         
-        @Getter private final String ID;
-        @Getter private final String[] text;
-        @Getter private final DialogOption[] option;
+        public final String ID;
+        public final String[] text;
+        public final DialogOption[] option;
     
         public DialogSnippet(String id, String[] text, DialogOption[] option) {
             this.ID = id;
@@ -47,8 +44,8 @@ public class Dialog {
     
         public static class DialogOption {
             
-            @Getter private final String To;
-            @Getter private final String[] Text;
+            public final String To;
+            public final String[] Text;
     
             public DialogOption(String to, String[] text) {
                 To = to;

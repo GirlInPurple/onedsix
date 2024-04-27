@@ -4,8 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.github.weisj.jsvg.SVGDocument;
 import com.github.weisj.jsvg.geometry.size.FloatSize;
 import com.github.weisj.jsvg.parser.SVGLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import onedsix.util.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,7 +16,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 public class SvgHandler {
-    private static final Logger L = LoggerFactory.getLogger(SvgHandler.class);
+    private static final Logger L = new Logger(SvgHandler.class);
     public static final SVGLoader loader = new SVGLoader();
     
     /**
@@ -60,7 +59,7 @@ public class SvgHandler {
             // Save the buffered image as PNG
             File outputfile = new File(fileName);
             ImageIO.write(bi, "png", outputfile);
-            L.info("Saved temporary SVG to "+fileName);
+            L.loadingLogger("Saved temporary SVG to "+fileName, Logger.Level.INFO);
             return fileName;
         } catch (IOException ioe) {
             ioe.printStackTrace();

@@ -7,14 +7,11 @@ import net.bytebuddy.matcher.ElementMatchers;
 import onedsix.gen.assets.Attributes;
 import onedsix.gen.assets.Item;
 import onedsix.gen.assets.Recipe;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.LinkedList;
+import onedsix.util.Logger;
 
 public class AsmTest {
     
-    private static final Logger L = LoggerFactory.getLogger(AsmTest.class);
+    private static final Logger L = new Logger(AsmTest.class);
     
     public static void asmTest() {
         try {
@@ -35,7 +32,7 @@ public class AsmTest {
             
             L.info((String) dynamicType.getMethod("toString").invoke(instance));
             L.info((String) dynamicType.getMethod("tester").invoke(instance));
-            L.info(String.valueOf(instance.getRoughCost()));
+            L.info(String.valueOf(instance.roughCost));
         } catch (Exception e) {
             L.error(e.getMessage(), e);
         }

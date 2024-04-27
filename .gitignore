@@ -1,5 +1,12 @@
-## Java
+## Project
+/temp/
+/mods/
+/screenshots/
+/logs/
+settings.json
+playerdata.json
 
+## Java
 *.class
 *.war
 *.ear

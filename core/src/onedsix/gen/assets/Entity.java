@@ -1,15 +1,17 @@
 package onedsix.gen.assets;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.math.Vector3;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class Entity {
-    @Getter @Setter private Decal img;
+public abstract class Entity {
+    /*
+    Currently migrating this over to the attribute system and removing Lombok.
+    Do not remove!
+    
     @Getter @Setter private HashMap<Decal, Long> queuedFrames;
     @Getter @Setter private long sinceLastFrame;
     @Getter @Setter private String name;
@@ -34,8 +36,10 @@ public class Entity {
     @Getter @Setter private List<Effect> statusEffects;
     @Getter @Setter private List<Item> inventory;
     @Getter @Setter private List<Perk> perks;
-    @Getter @Setter private Vector3 position;
-    @Getter @Setter private float speed;
+    */
+    public Decal img;
+    public float speed;
+    public Vector3 position;
 
     public Entity(
             Decal img,
@@ -48,6 +52,7 @@ public class Entity {
             Vector3 position
     ){
         this.img = img;
+        /*
         this.queuedFrames = new HashMap<>();
         this.sinceLastFrame = 0;
         this.name = name;
@@ -72,14 +77,14 @@ public class Entity {
         this.statusEffects = statusEffects;
         this.inventory = inventory;
         this.perks = perks;
-        this.position = position;
+        */
         this.speed = 5f;
-    }
-
-    public Object perFrame() {
-        return null;
+        this.position = position;
     }
     
-    public void cycleFrames() {
-    }
+    /** Cycles between a set of frames, used for animations. */
+    public void cycleFrames() {}
+    
+    /** Is called for every entity, every frame/server tick. Be careful what you put here! */
+    public abstract Object perFrame();
 }

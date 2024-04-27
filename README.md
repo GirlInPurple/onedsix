@@ -1,14 +1,48 @@
-## Modding API
+1D6
+===
+#### A Data-Gen based RPG Game/Engine
 
-First, import the project using [jitpack](https://jitpack.io/). Below is an example using Gradle and Maven respectively
+<img src="https://raw.githubusercontent.com/GirlInPurple/onedsix/master/assets/icon_large.png" alt="1D6 Logo" height="180px" align="right"/>
+
+This project was originally started because I wanted to make a DnD-like RPG game, homebrew and all, but it has grown quite significantly since then and has basically become its own engine on top of LibGDX.
+
+This project is based around Data-gen and allowing for any code you want to be run. Being open-source and lightweight, it makes this very easy and fast to add new features, to core or your own mod.\
+
+## For Users
+
+
+
+## For Server Owners
+
+
+
+## For Devs
+
+First, import the 1D6 using [jitpack](https://jitpack.io/) and LibGDX from Sonatype. Below is an example using Gradle and Maven respectively.\
+Check this repo's [gradle.properties](gradle.properties) for what versions to use.
 
 ```groovy
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
+    maven { url "https://jitpack.io" }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
 }
 dependencies {
-    implementation 'com.github.User:Repo:Tag'
+    // 1D6
+    implementation "com.github.GirlInPurple:onedsix:-SNAPSHOT" // Latest
+    implementation "com.github.GirlInPurple:onedsix:a0.1.0" // Alpha 0.1.0
+    implementation "com.github.GirlInPurple:onedsix:a0.1.1"// Alpha 0.1.1
+
+    // LibGDX
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-ai:$aiVersion" 
+    // Technically you dont need the ones below this, but its worth it to get anyways.
+    api "com.badlogicgames.ashley:ashley:$ashleyVersion"
+    api "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+    api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
+    api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
 }
 ```
 ```xml
@@ -17,44 +51,89 @@ dependencies {
         <id>jitpack.io</id>
         <url>https://jitpack.io</url>
     </repository>
-    <!-- The rest of your repos... -->
+    <repository>
+        <id>sonatype.snopshots</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+        <id>sonatype.releases</id>
+        <url>https://oss.sonatype.org/content/repositories/releases/</url>
+    </repository>
 </repositories>
-<dependency>
-    <groupId>com.github.User</groupId>
-    <artifactId>Repo</artifactId>
-    <version>Tag</version>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>com.github.GirlInPurple</groupId>
+        <artifactId>onedsix</artifactId>
+        <version>Tag</version>
+    </dependency>
+    <dependency>
+        <groupId>com.badlogicgames.gdx</groupId>
+        <artifactId>gdx</artifactId>
+        <version>1.12.1</version>
+    </dependency>
+</dependencies>
 ```
 
-### Examples
+First, lets create an `Item` and make it move the player X + 1.
 
-### Guidelines
+```java
+import com.badlogic.gdx.math.Vector3;
+import onedsix.Player;
+import onedsix.gen.assets.*;
 
-There are a few other guidelines to note:
+public class YourItem extends Item {
+    
+    // This means it will create an item with no texture, name, or model,
+    // but will create everything else needed for the item to exist and be accessible.
+    public YourItem(Attributes attributes, Recipe recipe, long roughCost) {
+        super(attributes, recipe, roughCost);
+    }
+    
+    // Whenever the item is used (outside battles) it will run this code here.
+    @Override public void onUse(Player player) {
+        player.position = new Vector3(
+                player.position.x + 1,
+                player.position.y,
+                player.position.z
+        );
+    }
+    
+    // Your IDE will tell you to create these, you can ignore them for now
+    @Override public void onInteract(Player player) {}
+    @Override public void onInteractBattle(Player player) {}
+    @Override public void onUseBattle(Player player) {}
+}
+```
 
-#### Avoid Enums at all costs!
+Now, make a hook into `ModStartupListener` and make sure you register your item.
 
-This one is pretty simple, if you ever want to add into something, its far easier to make it public and still a `array.add(object)` somewhere and make it work.\
-Its also partly preference from the main devs as well, so do what you want but beware of the consequences.
+```java
+import example.YourItem;
+import onedsix.event.modstartup.ModStartupEvent;
+import onedsix.event.modstartup.ModStartupListener;
+import onedsix.gen.DatagenHandler;
+import org.slf4j.*;
+
+public class ExampleMod implements ModStartupListener {
+    
+    private static final Logger L = LoggerFactory.getLogger(ExampleMod.class);
+    
+    @Override
+    public void onStartup(ModStartupEvent event) {
+        addCustomItem(YourItem.class);
+    }
+}
+
+```
+
+Done! Now you have added an item to the game!\
+For a more detailed explanation, check out the [wiki](https://github.com/GirlInPurple/onedsix/wiki).
 
 ## Licensing
 
-1D6 will forever remain <abbr title="Free Open Source Software">FOSS</abbr> under the MIT
+1D6 will forever remain <abbr title="Free Open Source Software">FOSS</abbr> under GPL-v3.0 license.\
+All art and music assets are owned by their creators, please ask them about licensing.
 
-### Dependencies
-
-These are all the dependencies for the project, and their accompanying licenses:
-
-<!-- https://www.tablesgenerator.com/markdown_tables -->
-|   	| Links 	| Version 	| License 	                                                          | Use 	|
-|---	|---	|:---:	|--------------------------------------------------------------------|---	|
-| LibGDX 	| [Github](https://github.com/libgdx/libgdx), [Homepage](https://libgdx.com/) 	| 1.12.1 (core)<br>2.3.20 (roboVM)<br>1.5 (box2Dlights)<br>1.7.4 (ashley)<br>1.8.2 (ai)<br>2.2.1 (controllers) 	| [Apache-2.0](https://github.com/libgdx/libgdx/blob/master/LICENSE) 	 | Wrapper around OpenGL serving as a game engine 	|
-| gson 	| [Github](https://github.com/google/gson) 	| 2.10.1 	| [Apache-2.0](https://github.com/google/gson/blob/main/LICENSE) 	   | JSON parser 	|  	|
-| jsvg 	| [Github](https://github.com/weisJ/jsvg) 	| 1.4.0 	| [MIT](https://github.com/weisJ/jsvg/blob/master/LICENSE) 	         | SVG parser 	|  	|
-| SLF4J 	| [Github](https://github.com/qos-ch/slf4j), [Homepage](https://www.slf4j.org/) 	| 1.7.32 (SLF4J)<br>1.2.6 (Logback) 	| [ARR](https://github.com/qos-ch/slf4j/blob/master/LICENSE.txt) 	   | Logger 	|
-| nashorn 	| [Github](https://github.com/openjdk/nashorn), [Homepage](https://openjdk.org/projects/nashorn/) 	| 15.4 	| [GPL-2.0](https://github.com/openjdk/nashorn/blob/main/LICENSE) 	  | Javascript Engine 	|
-| lombok 	| [Github](https://github.com/projectlombok/lombok), [Homepage](https://projectlombok.org/) 	| 1.18.26 	| [MIT](https://github.com/projectlombok/lombok/blob/master/LICENSE) 	 | Utilities 	|
-| ASM 	| [Homepage](https://asm.ow2.io/) 	| 9.6 	| [3-Clause BSD](https://asm.ow2.io/license.html) 	                  | Bytecode manipulation 	|  	|
-| byte buddy 	| [Github](https://github.com/raphw/byte-buddy), [Homepage](https://bytebuddy.net/) 	| 1.14.14 	| [Apache-2.0](https://github.com/raphw/byte-buddy/blob/master/LICENSE) 	 | Safer bytecode manipulation 	|
-| guava 	| [Github](https://github.com/google/guava) 	| 33.1.0-jre 	| [Apache-2.0](https://github.com/google/guava/blob/master/LICENSE) 	 | Utilities 	|
-| Fabric-ASM 	| [Github](https://github.com/Chocohead/Fabric-ASM) 	| v2.3 	| [MLP-2.0](https://github.com/Chocohead/Fabric-ASM/blob/master/LICENSE) 	 | Modifies Enums 	|
+LibGDX, ByteBuddy, and GSON are under Apache-2.0\
+jsvg is under MIT\
+ASM is under BSD 3-Clause

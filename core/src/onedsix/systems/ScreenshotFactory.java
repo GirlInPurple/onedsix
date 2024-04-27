@@ -4,8 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import onedsix.util.Logger;
 
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
@@ -13,7 +12,7 @@ import java.util.Date;
 
 public class ScreenshotFactory {
     
-    private static final Logger L = LoggerFactory.getLogger(ScreenshotFactory.class);
+    private static final Logger L = new Logger(ScreenshotFactory.class);
     
     public static String saveScreenshot() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy_HH.mm.ss.SSS");

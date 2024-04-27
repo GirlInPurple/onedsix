@@ -1,5 +1,5 @@
 android {
-    namespace "xyz.blurple.onedsix"
+    namespace "onedsix"
     buildToolsVersion "33.0.2"
     compileSdkVersion 33
     sourceSets {
@@ -18,7 +18,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "xyz.blurple.onedsix"
+        applicationId "onedsix"
         minSdkVersion 16
         targetSdkVersion 33
         versionCode 1
@@ -83,7 +83,7 @@ tasks.register('run', Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mygdx.game/com.mygdx.game.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'onedsix.android/onedsix.android.AndroidLauncher'
 }
 
 eclipse.project.name = appName + "-android"

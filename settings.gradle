@@ -1,1 +1,9 @@
-include 'android', 'basemod', 'core', 'desktop', 'server'
+include 'basemod' // Official Base Mod
+include 'core' // Core, everything depends on it
+include 'desktop' // Windows/Linux/Mac
+include 'server' // Server Software
+
+if (!System.env.JITPACK) {
+    include 'android' // Android/Mobile
+    include 'examplemod' // Example Mod
+}

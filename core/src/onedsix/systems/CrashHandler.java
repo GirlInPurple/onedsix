@@ -3,8 +3,7 @@ package onedsix.systems;
 
 import com.badlogic.gdx.Gdx;
 import onedsix.util.FileHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import onedsix.util.Logger;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -13,7 +12,7 @@ import static onedsix.util.FileHandler.newlineOnArray;
 
 public class CrashHandler {
     
-    private static final Logger L = LoggerFactory.getLogger(CrashHandler.class);
+    private static final Logger L = new Logger(CrashHandler.class);
     
     public static void createCrash(Throwable e) {
         

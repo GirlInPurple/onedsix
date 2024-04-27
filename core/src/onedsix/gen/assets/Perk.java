@@ -1,4 +1,4 @@
 package onedsix.gen.assets;
 
-public class Perk extends Equipable {
+public class Perk {
 }

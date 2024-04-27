@@ -1,17 +1,16 @@
 package onedsix.gen.js;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import onedsix.util.Logger;
 
 import javax.script.*;
 
 public class Javascript {
     
+    private static final Logger L = new Logger(Javascript.class);
     public static final String engineName = "nashorn";
     public static ScriptEngineManager manager;
     public static ScriptEngine js;
     public static Bindings bindings;
-    private static final Logger L = LoggerFactory.getLogger(Javascript.class);
     
     public static void jsInit() {
         try {
@@ -23,9 +22,8 @@ public class Javascript {
             if ((double) js.eval("Math.cos(Math.PI);") == -1.0d) {
                 L.info("Javascript engine started!");
             }
-        } catch (ScriptException se) {
-            L.error(se.getMessage());
-            se.printStackTrace();
+        } catch (Exception e) {
+            L.error(e.getMessage(), e);
             
         }
     }

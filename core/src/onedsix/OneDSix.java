@@ -12,27 +12,29 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import onedsix.event.settings.SettingsChangeEvent;
 import onedsix.event.settings.SettingsChangeListener;
-import onedsix.gen.handling.DatagenHandler;
+import onedsix.gen.DatagenHandler;
 import onedsix.graphics.GeometryHandler;
 import onedsix.graphics.Title;
-import org.slf4j.*;
+import onedsix.util.Logger;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static onedsix.gen.discovery.ModDiscovery.startupModDiscovery;
+import static onedsix.net.http.Requests.GithubRequest.makeRequest;
 import static onedsix.systems.CrashHandler.createCrash;
 import static onedsix.systems.GameSettings.*;
 import static onedsix.systems.ScreenshotFactory.saveScreenshot;
-import static onedsix.gen.asm.AsmTest.asmTest;
 import static onedsix.event.settings.SettingsChangeManager.addSettingsChangeListener;
 import static onedsix.graphics.Title.randomSplash;
 import static onedsix.gen.js.Javascript.jsInit;
 import static onedsix.Vars.*;
+import static onedsix.util.FileHandler.createDirectory;
 
 public class OneDSix extends ApplicationAdapter implements SettingsChangeListener, LifecycleListener {
     
-    private static final Logger L = LoggerFactory.getLogger(OneDSix.class);
+    private static final Logger L = new Logger(OneDSix.class);
     
     /**
      * Debug and Development testing function.<br>
@@ -55,24 +57,28 @@ public class OneDSix extends ApplicationAdapter implements SettingsChangeListene
                 new DepthTestAttribute(false)
         };
         
-        Model model = Vars.modelBuilder.createBox(50f, 1f, 50f,
+        Model model = modelBuilder.createBox(50f, 1f, 50f,
                 new Material(matAttr),
                 miscAttr);
-        Vars.modelInstances.add(GeometryHandler.transformShorthand(0, -10, 0, new ModelInstance(model)));
+        modelInstances.add(GeometryHandler.transformShorthand(0, -10, 0, new ModelInstance(model)));
     }
     
     @Override
     public void create() {
         
-        asmTest();
+        makeRequest();
         
         // Change Phase
-        Vars.currentPhase = Vars.Phases.DISCOVERY;
+        currentPhase = Phases.DISCOVERY;
         
         // Needs to load these at startup. Read on first frame!
-        Vars.loadList.add("playerdata.json");
-        Vars.loadList.add("grass.json");
-        Vars.loadList.add("back_bay.json");
+        loadList.add("playerdata.json");
+        loadList.add("gamedata.json");
+        loadList.add("grass.json");
+        loadList.add("back_bay.json");
+        
+        // Mods
+        startupModDiscovery();
         
         // Settings
         addSettingsChangeListener(OneDSix.this);
@@ -91,31 +97,31 @@ public class OneDSix extends ApplicationAdapter implements SettingsChangeListene
         // Javascript
         jsInit();
     
-        // Create temporary directory
-        File tempdir = new File("./temp/");
-        if (!tempdir.exists()) {
-            tempdir.mkdirs();
-        }
+        // Create directories
+        createDirectory("./temp/");
+        createDirectory("./mods/");
+        createDirectory("./screenshots/");
+        createDirectory("./logs/");
         
         // Version and Lights
-        Vars.environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-        Vars.environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+        environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
         // Cameras
-        Vars.camOffset = new Vector3(10f, 10f, 0f);
-        Vars.cam3D.position.set(Vars.camOffset);
-        Vars.cam3D.lookAt(0f,0f,0f);
-        Vars.cam3D.near = 1f;
-        Vars.cam3D.far = 300f;
-        Vars.cam3D.update();
-        Vars.camHUD.position.set(Vars.camHUD.viewportWidth / 2.0f, Vars.camHUD.viewportHeight / 2.0f, 1.0f);
-        Gdx.input.setInputProcessor(new InputMultiplexer(Vars.camController));
+        camOffset = new Vector3(10f, 10f, 0f);
+        cam3D.position.set(camOffset);
+        cam3D.lookAt(0f,0f,0f);
+        cam3D.near = 1f;
+        cam3D.far = 300f;
+        cam3D.update();
+        camHUD.position.set(camHUD.viewportWidth / 2.0f, camHUD.viewportHeight / 2.0f, 1.0f);
+        Gdx.input.setInputProcessor(new InputMultiplexer(camController));
         
         // Window size bugfix
-        Vars.windowSize.add(800);
-        Vars.windowSize.add(480);
-        Vars.windowSize.add(0);
-        Vars.windowSize.add(0);
+        windowSize.add(800);
+        windowSize.add(480);
+        windowSize.add(0);
+        windowSize.add(0);
         
         // Beta/Dev stuff
         testing();
@@ -126,16 +132,16 @@ public class OneDSix extends ApplicationAdapter implements SettingsChangeListene
         
         DatagenHandler.read();
     
-        if ((System.nanoTime() + 5000) <= Vars.windowSize.get(2) && Vars.windowSize.get(3) == 0) {
-            L.info("Resized ("+ Vars.windowSize.get(0)+", "+ Vars.windowSize.get(1)+")");
-            Vars.windowSize.set(3, 1);
+        if ((System.nanoTime() + 5000) <= windowSize.get(2) && windowSize.get(3) == 0) {
+            L.info("Resized ("+ windowSize.get(0)+", "+ windowSize.get(1)+")");
+            windowSize.set(3, 1);
         }
     
         boolean tookScreenshot = false;
         String screenshotFile = "";
         
         if (true) {
-            if (Vars.keyCalls.isDebug()) {
+            if (keyCalls.debug) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.F2) ||
                             Gdx.input.isKeyJustPressed(Input.Keys.O)) {
                     tookScreenshot = true;
@@ -143,7 +149,7 @@ public class OneDSix extends ApplicationAdapter implements SettingsChangeListene
                 }
                 if (Gdx.input.isKeyJustPressed(Input.Keys.F3) ||
                             Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-                    Vars.debugMode = !Vars.debugMode;
+                    debugMode = !debugMode;
                 }
                 if (Gdx.input.isKeyJustPressed(Input.Keys.F4) ||
                             Gdx.input.isKeyJustPressed(Input.Keys.I)) {
@@ -157,20 +163,20 @@ public class OneDSix extends ApplicationAdapter implements SettingsChangeListene
                 }
             }
     
-            if (Vars.keyCalls.isInventory() &&
+            if (keyCalls.inventory &&
                         Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 // Inventory
             }
         }
         
-        if (Vars.shouldAttemptRendering) {
+        if (shouldAttemptRendering) {
             // Camera
             // Player's perFrame(); is in here!
-            if (Objects.nonNull(Vars.player)) {
-                Vars.cam3D.position.set(GeometryHandler.addVectors(Vars.player.perFrame(), Vars.camOffset));
-                //Vars.cam3D.lookAt(); // Camera View Offset
+            if (Objects.nonNull(player)) {
+                cam3D.position.set(GeometryHandler.addVectors(player.perFrame(), camOffset));
+                //cam3D.lookAt(); // Camera View Offset
             }
-            Vars.cam3D.update(true);
+            cam3D.update(true);
             // Window
             Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             // Pre-Render Fix
@@ -178,68 +184,68 @@ public class OneDSix extends ApplicationAdapter implements SettingsChangeListene
             //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT); ehhh???
     
             // Init HUD camera and SpriteBatch to render text
-            Vars.camHUD.update();
-            Vars.spriteBatch.setProjectionMatrix(Vars.camHUD.combined);
-            Vars.spriteBatch.begin();
+            camHUD.update();
+            spriteBatch.setProjectionMatrix(camHUD.combined);
+            spriteBatch.begin();
             
-            if (Vars.currentPhase > Vars.Phases.INIT) {
+            if (currentPhase >= Phases.INIT) {
                 // Render Models and Geometry
-                Vars.modelBatch.begin(Vars.cam3D);
-                for (ModelInstance m : Vars.modelInstances) {
-                    Vars.modelBatch.render(m, Vars.environment);
+                modelBatch.begin(cam3D);
+                for (ModelInstance m : modelInstances) {
+                    modelBatch.render(m, environment);
                 }
-                Vars.modelBatch.end();
+                modelBatch.end();
     
                 // Render Player
-                if (Objects.nonNull(Vars.player)) {
-                    Vars.player.getImg().setPosition(Vars.player.getPosition());
-                    Vars.player.getImg().lookAt(Vars.cam3D.position, Vars.cam3D.up);
-                    Vars.decalBatch.add(Vars.player.getImg());
+                if (Objects.nonNull(player)) {
+                    player.img.setPosition(player.position);
+                    player.img.lookAt(cam3D.position, cam3D.up);
+                    decalBatch.add(player.img);
                 }
     
                 // Render other Decals
-                for (Decal d : Vars.decals) {
-                    d.lookAt(Vars.cam3D.position, Vars.cam3D.up);
-                    Vars.decalBatch.add(d);
+                for (Decal d : decals) {
+                    d.lookAt(cam3D.position, cam3D.up);
+                    decalBatch.add(d);
                 }
-                Vars.decalBatch.flush();
+                decalBatch.flush();
                 
                 // Render Sprites
-                for (Sprite s : Vars.sprites) {
-                    s.draw(Vars.spriteBatch);
+                for (Sprite s : sprites) {
+                    s.draw(spriteBatch);
                 }
-                Vars.font.setColor(0, 0, 0, 1);
+                font.setColor(0, 0, 0, 1);
             }
             else {
                 
                 // Render Font
-                Vars.font.setColor(1, 1, 1, 1);
-                Vars.font.draw(Vars.spriteBatch, "loading...", Vars.camHUD.viewportWidth/2, Vars.camHUD.viewportWidth/5);
+                font.setColor(1, 1, 1, 1);
+                font.draw(spriteBatch, "loading...", camHUD.viewportWidth/2, camHUD.viewportWidth/5);
     
                 AtomicInteger line = new AtomicInteger(1);
-                if (Vars.debugMode) {
-                    Vars.font.draw(Vars.spriteBatch, "Loading Log Disabled; Debug Mode Enabled", 0, Vars.font.getLineHeight());
+                if (debugMode) {
+                    font.draw(spriteBatch, "Loading Log Disabled; Debug Mode Enabled", 0, font.getLineHeight());
                 } else {
                     loadingLogs.descendingIterator().forEachRemaining((ll) -> {
-                        Vars.font.setColor(1, 1, 1, 1);
-                        Vars.font.draw(Vars.spriteBatch, ll.text, 0, (Vars.font.getLineHeight() * line.get()));
+                        font.setColor(1, 1, 1, 1);
+                        font.draw(spriteBatch, ll.text, 0, (font.getLineHeight() * line.get()));
                         line.getAndIncrement();
                     });
                 }
     
             }
-            if (Vars.debugMode) {
-                Vars.font.draw(Vars.spriteBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, Vars.camHUD.viewportHeight);
-                Vars.font.draw(Vars.spriteBatch, "DTT: " + Gdx.graphics.getDeltaTime(), 0, Vars.camHUD.viewportHeight - (Vars.font.getLineHeight()));
-                Vars.font.draw(Vars.spriteBatch, "FID: " + Gdx.graphics.getFrameId(), 0, Vars.camHUD.viewportHeight - (Vars.font.getLineHeight() * 2));
-                Vars.font.draw(Vars.spriteBatch, "POS: " + Vars.cam3D.position.toString(), 0, Vars.camHUD.viewportHeight - (Vars.font.getLineHeight() * 3));
+            if (debugMode) {
+                font.draw(spriteBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, camHUD.viewportHeight);
+                font.draw(spriteBatch, "DTT: " + Gdx.graphics.getDeltaTime(), 0, camHUD.viewportHeight - (font.getLineHeight()));
+                font.draw(spriteBatch, "FID: " + Gdx.graphics.getFrameId(), 0, camHUD.viewportHeight - (font.getLineHeight() * 2));
+                font.draw(spriteBatch, "POS: " + cam3D.position.toString(), 0, camHUD.viewportHeight - (font.getLineHeight() * 3));
             }
             if (tookScreenshot) {
-                Vars.font.draw(Vars.spriteBatch, "Screenshot saved to " + screenshotFile, 0, Vars.camHUD.viewportHeight);
+                font.draw(spriteBatch, "Screenshot saved to " + screenshotFile, 0, camHUD.viewportHeight);
             }
             
             // Dispose Spritebatch
-            Vars.spriteBatch.end();
+            spriteBatch.end();
         }
     }
     
@@ -247,41 +253,40 @@ public class OneDSix extends ApplicationAdapter implements SettingsChangeListene
     public void dispose() {
         
         // Dispose assets
-        Vars.spriteBatch.dispose();
-        Vars.modelBatch.dispose();
-        for (ModelInstance m : Vars.modelInstances) {
+        spriteBatch.dispose();
+        modelBatch.dispose();
+        for (ModelInstance m : modelInstances) {
             m.model.dispose();
         }
-        Vars.decalBatch.dispose();
+        decalBatch.dispose();
         
         // Delete Temp Folder
         File tempdir = new File("./temp/");
         for (File f : tempdir.listFiles()) {
             f.delete();
         }
-        tempdir.delete();
         
         L.info("Stopped");
     }
     
     @Override
     public void resize(int width, int height) {
-        Vars.windowSize.set(0, width);
-        Vars.windowSize.set(1, height);
-        Vars.windowSize.set(2, (int) System.nanoTime());
-        Vars.windowSize.set(3, 0);
+        windowSize.set(0, width);
+        windowSize.set(1, height);
+        windowSize.set(2, (int) System.nanoTime());
+        windowSize.set(3, 0);
         Gdx.graphics.setWindowedMode(width, height);
     }
     
     @Override
     public void pause() {
-        Vars.shouldAttemptRendering = false;
+        shouldAttemptRendering = false;
         L.info("Paused");
     }
     
     @Override
     public void resume() {
-        Vars.shouldAttemptRendering = true;
+        shouldAttemptRendering = true;
         L.info("Unpaused");
     }
 
@@ -289,12 +294,12 @@ public class OneDSix extends ApplicationAdapter implements SettingsChangeListene
     @Override
     public void settingsChanged(SettingsChangeEvent event, SettingsJson js) {
         L.info("Refreshing settings...");
-        Gdx.graphics.setForegroundFPS(Vars.settings.targetFps);
-        Gdx.graphics.setVSync(Vars.settings.useVsync);
+        Gdx.graphics.setForegroundFPS(settings.targetFps);
+        Gdx.graphics.setVSync(settings.useVsync);
     
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
             // If running on Desktop and splash texts are turned off, set title without splash.
-            if (!Vars.settings.useSplashText) {
+            if (!settings.useSplashText) {
                 Gdx.graphics.setTitle(Title.title);
             }
             // Otherwise, go wild.

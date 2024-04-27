@@ -1,11 +1,13 @@
 package onedsix.gen.assets;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.badlogic.gdx.graphics.Texture;
 
-public class Effect extends Equipable {
-    @Getter boolean isPositive;
-    @Getter @Setter private Attributes attributes;
+public class Effect {
+    //public String name;
+    public Attributes attributes;
+    public Texture img;
+    public int level;
+    public boolean isPositive;
     
     public Effect(boolean isPositive, Attributes attributes) {
         this.isPositive = isPositive;

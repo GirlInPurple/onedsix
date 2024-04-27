@@ -3,8 +3,6 @@ package onedsix.util;
 import com.badlogic.gdx.Gdx;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,7 +16,7 @@ import static onedsix.util.FileHandler.JSON.*;
 
 public class FileHandler {
     
-    private static final Logger L = LoggerFactory.getLogger(FileHandler.class);
+    private static final Logger L = new Logger(FileHandler.class);
     
     public static class NOFORMAT {
         /**
@@ -151,6 +149,7 @@ public class FileHandler {
     public static List<String> splitOnNewline(String in) {
         return new ArrayList<>(Arrays.asList(in.split("\\r?\\n")));
     }
+    
     public static String newlineOnArray(String[] in) {
         StringBuilder sb = new StringBuilder();
         for (String s : in) {
@@ -167,5 +166,12 @@ public class FileHandler {
             sb.append("\n");
         }
         return sb.toString();
+    }
+    
+    public static void createDirectory(String folder) {
+        File dir = new File(folder);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
     }
 }

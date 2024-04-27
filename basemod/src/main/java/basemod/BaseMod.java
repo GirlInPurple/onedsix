@@ -1,4 +1,4 @@
-package onedsix;
+package basemod;
 
 import onedsix.event.modstartup.ModStartupEvent;
 import onedsix.event.modstartup.ModStartupListener;

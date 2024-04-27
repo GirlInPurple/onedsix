@@ -1,15 +1,12 @@
 package onedsix.gen.assets;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
 public class Attributes {
     
+    /*
     @Getter @Setter private String name;
     @Getter @Setter private int level;
     @Getter @Setter private float experience;
@@ -24,7 +21,8 @@ public class Attributes {
     @Getter @Setter private float sicknessChance;
     @Getter @Setter private int absorbedRadiation;
     @Getter @Setter private int outputRadiation;
-    @Getter public final LinkedList<Attribute> attributes;
+    */
+    public final LinkedList<Attribute> attributes;
     
     /**
      * Creates a {@link Attributes} instance with the specified {@link Attribute} list.
