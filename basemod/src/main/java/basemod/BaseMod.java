@@ -2,11 +2,11 @@ package basemod;
 
 import onedsix.event.modstartup.ModStartupEvent;
 import onedsix.event.modstartup.ModStartupListener;
-import org.slf4j.*;
+import onedsix.util.Logger;
 
 public class BaseMod implements ModStartupListener {
     
-    private static final Logger L = LoggerFactory.getLogger(BaseMod.class);
+    private static final Logger L = new Logger(BaseMod.class);
     
     @Override
     public void onStartup(ModStartupEvent event) {
