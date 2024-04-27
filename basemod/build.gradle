@@ -1,6 +1,6 @@
 /*
     This is an example on how your mod's build.gradle should look like, at least starting out.
-    It imports LibGDX, GSON, SLF4J, and 1D6 itself.
+    It imports LibGDX, GSON, and 1D6 itself.
     With these you have basically everything you need to write a mod.
     If you need any help, feel free to reach out.
 
@@ -36,12 +36,8 @@ dependencies {
     // JSON
     implementation 'com.google.code.gson:gson:2.8.9'
 
-    // SLF4J
-    implementation "org.slf4j:slf4j-api:1.7.32"
-    implementation "ch.qos.logback:logback-classic:1.2.6"
-
     // 1D6
-    //implementation 'com.github.GirlInPurple:onedsix:master-SNAPSHOT'
+    implementation 'com.github.GirlInPurple:onedsix:master-SNAPSHOT'
 
     // LibGDX
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
