@@ -1,0 +1,150 @@
+buildscript {
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        google()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.2'
+        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.20'
+    }
+}
+
+allprojects {
+    apply plugin: "eclipse"
+
+    version = '1.0'
+    ext {
+        appName = "OneDSix"
+        gdxVersion = '1.12.1'
+        roboVMVersion = '2.3.20'
+        box2DLightsVersion = '1.5'
+        ashleyVersion = '1.7.4'
+        aiVersion = '1.8.2'
+        gdxControllersVersion = '2.2.1'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://repo.spongepowered.org/repository/maven-public/" }
+        maven { url "https://jitpack.io" }
+    }
+}
+
+project(":android") {
+    apply plugin: "com.android.application"
+
+    configurations { natives }
+
+    dependencies {
+        implementation project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+        api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        api "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        api "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
+        api "com.badlogicgames.gdx-controllers:gdx-controllers-android:$gdxControllersVersion"
+        api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
+        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
+        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
+        
+    }
+}
+
+project(":basemod") {
+    apply plugin: "java-library"
+    // Look inside BaseMod's specific build.gradle for more info
+}
+
+project(":core") {
+    apply plugin: "java-library"
+
+    dependencies {
+
+        // LibGDX
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        api "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        api "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
+        api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+
+        // JSON
+        implementation "com.google.code.gson:gson:2.10.1"
+
+        // SVG
+        implementation "com.github.weisj:jsvg:1.4.0"
+
+        // SLF4J
+        implementation "org.slf4j:slf4j-api:1.7.32"
+        implementation "ch.qos.logback:logback-classic:1.2.6"
+
+        // JavaScript
+        implementation 'org.openjdk.nashorn:nashorn-core:15.4'
+
+        // Other Utils
+        compileOnly "org.jetbrains:annotations:23.0.0"
+        implementation "org.projectlombok:lombok:1.18.26"
+        annotationProcessor "org.projectlombok:lombok:1.18.26"
+        implementation 'org.apache.commons:commons-lang3:3.14.0'
+
+        // Mixin/Modding
+        implementation "org.ow2.asm:asm-tree:$asm_version"
+        implementation "org.ow2.asm:asm-commons:$asm_version"
+        implementation "org.ow2.asm:asm-util:$asm_version"
+        implementation "org.ow2.asm:asm-tree:$asm_version"
+        implementation 'org.spongepowered:mixin:0.8.5'
+        implementation "net.bytebuddy:byte-buddy:$byte_buddy_version"
+        implementation "com.google.guava:guava:33.1.0-jre"
+        implementation "com.github.Chocohead:Fabric-ASM:v2.3"
+    }
+}
+
+project(":desktop") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+
+        // SLF4J
+        // Yes, it overlaps with the version in Core, but a weird bug is stopping it from transferring over
+        implementation "org.slf4j:slf4j-api:1.7.32"
+        implementation "ch.qos.logback:logback-classic:1.2.6"
+
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
+        api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+
+    }
+}
+
+project(":server") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+
+    }
+}

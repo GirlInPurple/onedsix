@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+group 'onedsix'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+
+    // JSON
+    implementation 'com.google.code.gson:gson:2.8.9'
+
+    // SLF4J
+    implementation "org.slf4j:slf4j-api:1.7.32"
+    implementation "ch.qos.logback:logback-classic:1.2.6"
+
+    // 1D6
+    implementation "com.github.GirlInPurple:onedsix:a0.1.0"
+}

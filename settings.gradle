@@ -1,0 +1,1 @@
+include 'android', 'basemod', 'core', 'desktop', 'server'

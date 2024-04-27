@@ -1,0 +1,3 @@
+# This file holds all the IP addresses of banned, private, or otherwise hidden servers.
+# You can still access them manually, but non-modified servers/clients will refuse to scan them.
+# Please don't try to scan, join, or mess with them, they're on here for a reason.

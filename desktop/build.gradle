@@ -1,0 +1,67 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = 1.8
+
+def onedsixVersion = project.findProperty("onedsix_version") ?: "unknown"
+def onedsixBranch = project.findProperty("onedsix_branch") ?: "unknown"
+
+sourceSets {
+    main {
+        java {
+            srcDirs = [ "src/" ]
+        }
+        resources {
+            srcDirs = ["../assets"]
+        }
+    }
+}
+
+println "onedsixVersion: $onedsixVersion"
+println "onedsixBranch: $onedsixBranch"
+
+project.ext.mainClassName = "DesktopLauncher"
+project.ext.assetsDir = new File("../assets")
+
+import org.gradle.internal.os.OperatingSystem
+
+tasks.register('run', JavaExec) {
+    dependsOn classes
+    mainClass = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+
+    if (OperatingSystem.current() == OperatingSystem.MAC_OS) {
+        // Required to run on macOS
+        jvmArgs += "-XstartOnFirstThread"
+    }
+}
+
+tasks.register('debug', JavaExec) {
+    dependsOn classes
+    mainClass = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+    debug = true
+}
+
+tasks.register('dist', Jar) {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+    manifest {
+        attributes 'Main-Class': 'onedsix.DesktopLauncher'
+    }
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
+
+dist.dependsOn classes
+
+eclipse.project.name = appName + "-desktop"

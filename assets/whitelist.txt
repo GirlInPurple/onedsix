@@ -1,0 +1,6 @@
+# This file contains all the servers that are known to have high uptime,
+# good connection in multiple different timezones, and have asked to be on this list.
+# If you want to be on this list, get to the near top of the server list and submit a PR.
+#
+# Debug and development only address.
+# 192.168.1.1
