@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: "java-library"
 sourceCompatibility = 1.8
 
 def onedsixVersion = project.findProperty("onedsix_version") ?: "unknown"
@@ -13,6 +14,17 @@ sourceSets {
             srcDirs = ["../assets"]
         }
     }
+}
+
+dependencies {
+    implementation project(":core")
+
+    api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+    api "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
+    api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+
 }
 
 println "onedsixVersion: $onedsixVersion"

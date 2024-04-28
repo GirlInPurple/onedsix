@@ -3,7 +3,11 @@ include 'desktop' // Windows/Linux/Mac
 include 'server' // Server Software
 
 if (!System.env.JITPACK) {
-    //include 'android' // Android/Mobile
-    //include 'basemod' // Official Base Mod
-    //include 'examplemod' // Example Mod
+    include 'basemod' // Official Base Mod
+    include 'examplemod' // Example Mod
+
+    // Me messing around trying to get android to play nice and compile >:(
+    if (System.env.ANDROID) {
+        include 'android' // Android/Mobile
+    }
 }

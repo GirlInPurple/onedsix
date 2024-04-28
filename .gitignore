@@ -6,6 +6,14 @@
 settings.json
 playerdata.json
 
+/android/build/
+/basemod/build/
+/core/build
+/desktop/build
+/examplemod/build/
+/server/build/
+
+
 ## Java
 *.class
 *.war

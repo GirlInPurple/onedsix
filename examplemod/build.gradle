@@ -9,6 +9,7 @@
 
 plugins {
     id 'java'
+    id "java-library"
 }
 
 group 'onedsix'
@@ -30,7 +31,7 @@ dependencies {
     implementation "ch.qos.logback:logback-classic:1.2.6"
 
     // 1D6
-    //implementation "com.github.GirlInPurple:onedsix:master-SNAPSHOT"
+    implementation "com.github.GirlInPurple:onedsix:master-SNAPSHOT"
 
     // LibGDX
     api "com.badlogicgames.gdx:gdx:$gdxVersion"

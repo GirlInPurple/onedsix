@@ -1,11 +1,13 @@
-package onedsix;
+package example;
 
-import example.YourItem;
 import onedsix.event.modstartup.ModStartupEvent;
 import onedsix.event.modstartup.ModStartupListener;
-import onedsix.gen.DatagenHandler;
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import static onedsix.gen.DatagenHandler.addCustomItem;
+
+@SuppressWarnings("unused")
 public class ExampleMod implements ModStartupListener {
     
     private static final Logger L = LoggerFactory.getLogger(ExampleMod.class);
