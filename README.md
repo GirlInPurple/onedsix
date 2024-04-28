@@ -1,8 +1,11 @@
 1D6
 ===
-#### A Data-Gen based RPG Game/Engine
 
 <img src="https://raw.githubusercontent.com/GirlInPurple/onedsix/master/assets/icon_large.png" alt="1D6 Logo" height="180px" align="right"/>
+
+### A Data-Gen based RPG Game/Engine
+
+**Notice: Android support has been dropped temporally until I can figure out what and why it's breaking the entire build process.**
 
 This project was originally started because I wanted to make a DnD-like RPG game, homebrew and all, but it has grown quite significantly since then and has basically become its own engine on top of LibGDX.
 
@@ -30,9 +33,8 @@ repositories {
 }
 dependencies {
     // 1D6
-    implementation "com.github.GirlInPurple:onedsix:-SNAPSHOT" // Latest
-    implementation "com.github.GirlInPurple:onedsix:a0.1.0" // Alpha 0.1.0
-    implementation "com.github.GirlInPurple:onedsix:a0.1.1"// Alpha 0.1.1
+    implementation "com.github.GirlInPurple:onedsix:d1.0.0" // Development 1.0.1
+    implementation "com.github.GirlInPurple:onedsix:d1.0.1" // Development 1.0.1
 
     // LibGDX
     api "com.badlogicgames.gdx:gdx:$gdxVersion"

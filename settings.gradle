@@ -3,7 +3,7 @@ include 'desktop' // Windows/Linux/Mac
 include 'server' // Server Software
 
 if (!System.env.JITPACK) {
-    include 'android' // Android/Mobile
-    include 'basemod' // Official Base Mod
-    include 'examplemod' // Example Mod
+    //include 'android' // Android/Mobile
+    //include 'basemod' // Official Base Mod
+    //include 'examplemod' // Example Mod
 }

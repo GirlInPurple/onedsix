@@ -1,26 +1,24 @@
+/*
 buildscript {
-    //if (!System.env.JITPACK) {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        google()
+    }
 
-        repositories {
-            mavenLocal()
-            mavenCentral()
-            gradlePluginPortal()
-            maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-            google()
-        }
-
-        dependencies {
-            classpath 'com.android.tools.build:gradle:8.1.2'
-            classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.20'
-        }
-
-    //}
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.2'
+        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.20'
+    }
 }
+*/
 
 allprojects {
     apply plugin: "eclipse"
 
-    version = '1.0'
+    version = 'd1.0.0'
     ext {
         appName = "OneDSix"
         gdxVersion = '1.12.1'
@@ -42,6 +40,7 @@ allprojects {
     }
 }
 
+/*
 project(":android") {
     apply plugin: "com.android.application"
 
@@ -76,6 +75,7 @@ project(":basemod") {
     apply plugin: "java-library"
     // Look inside BaseMod's specific build.gradle for more info
 }
+*/
 
 project(":core") {
     apply plugin: "java-library"
@@ -95,10 +95,10 @@ project(":core") {
         implementation "com.google.code.gson:gson:2.10.1"
 
         // SVG
-        implementation "com.github.weisj:jsvg:1.4.0"
+        compileOnly "com.github.weisj:jsvg:1.4.0"
 
         // JavaScript
-        implementation 'org.openjdk.nashorn:nashorn-core:15.4'
+        compileOnly 'org.openjdk.nashorn:nashorn-core:15.4'
 
         // Other Utils
         compileOnly "org.jetbrains:annotations:23.0.0"
@@ -127,17 +127,17 @@ project(":desktop") {
 
     }
 }
-
+/*
 project(":examplemod") {
     apply plugin: "java-library"
     // Look inside ExampleMod's specific build.gradle for more info
 }
+*/
 
 project(":server") {
     apply plugin: "java-library"
 
     dependencies {
         implementation project(":core")
-
     }
 }
