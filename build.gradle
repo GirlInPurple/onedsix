@@ -1,5 +1,5 @@
 buildscript {
-    if (!System.env.JITPACK) {
+    //if (!System.env.JITPACK) {
 
         repositories {
             mavenLocal()
@@ -14,7 +14,7 @@ buildscript {
             classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.20'
         }
 
-    }
+    //}
 }
 
 allprojects {
@@ -42,40 +42,33 @@ allprojects {
     }
 }
 
-if (!System.env.JITPACK) {
-    project(":android") {
-        apply plugin: "com.android.application"
+project(":android") {
+    apply plugin: "com.android.application"
 
-        configurations { natives }
+    configurations { natives }
 
-        dependencies {
-            implementation project(":core")
-            api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
-            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
-            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
-            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
-            api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-            api "com.badlogicgames.ashley:ashley:$ashleyVersion"
-            api "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-            api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-            natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
-            natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
-            natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
-            natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
-            api "com.badlogicgames.gdx-controllers:gdx-controllers-android:$gdxControllersVersion"
-            api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-            natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
-            natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
-            natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
-            natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
+    dependencies {
+        implementation project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+        api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        api "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        api "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
+        api "com.badlogicgames.gdx-controllers:gdx-controllers-android:$gdxControllersVersion"
+        api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
+        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
+        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
+        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
 
-        }
-    }
-
-    project(":examplemod") {
-        apply plugin: "java-library"
-        // Look inside ExampleMod's specific build.gradle for more info
     }
 }
 
@@ -133,6 +126,11 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 
     }
+}
+
+project(":examplemod") {
+    apply plugin: "java-library"
+    // Look inside ExampleMod's specific build.gradle for more info
 }
 
 project(":server") {

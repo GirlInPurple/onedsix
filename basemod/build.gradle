@@ -34,7 +34,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
 
     // 1D6
-    implementation 'com.github.GirlInPurple:onedsix:master-SNAPSHOT'
+    //implementation 'com.github.GirlInPurple:onedsix:master-SNAPSHOT'
 
     // LibGDX
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"

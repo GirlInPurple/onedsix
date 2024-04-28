@@ -30,7 +30,7 @@ dependencies {
     implementation "ch.qos.logback:logback-classic:1.2.6"
 
     // 1D6
-    implementation "com.github.GirlInPurple:onedsix:-SNAPSHOT"
+    //implementation "com.github.GirlInPurple:onedsix:master-SNAPSHOT"
 
     // LibGDX
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
