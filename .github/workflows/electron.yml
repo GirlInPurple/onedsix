@@ -1,0 +1,32 @@
+name: Build Electron
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Packages
+        run: npm ci
+
+      - name: Build Launcher
+        run: npm run start
+
+      - name: Capture Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Launcher Artifacts
+          path: launcher/out/make/

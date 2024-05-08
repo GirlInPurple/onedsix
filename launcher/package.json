@@ -1,5 +1,5 @@
 {
-  "name": "1D6 Launcher",
+  "name": "1d6_launcher",
   "version": "1.0.0",
   "description": "The official 1D6 game launcher",
   "main": "main.js",
@@ -24,7 +24,6 @@
     "electron": "^30.0.2"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0",
-    "jquery": "^3.7.1"
+    "electron-squirrel-startup": "^1.0.0"
   }
 }
