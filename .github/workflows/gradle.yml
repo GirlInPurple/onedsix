@@ -32,12 +32,27 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
+    - name: make gradle wrapper executable
+      run: chmod +x ./gradlew
+
     - name: Build with Gradle Wrapper
       run: ./gradlew build
 
     # LibGDX uses "./gradlew dist" instead of "./gradlew build"
     - name: Dist with Gradle Wrapper
       run: ./gradlew dist
+
+    - name: Capture Desktop Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Desktop Artifacts
+        path: desktop/build/libs/
+
+    - name: Capture Server Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Server Artifacts
+        path: server/build/libs/
 
   dependency-submission:
 
