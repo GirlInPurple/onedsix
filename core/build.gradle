@@ -3,13 +3,8 @@ apply plugin: "java-library"
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-sourceSets {
-    main {
-        java {
-            srcDirs = [ "src/" ]
-        }
-    }
-}
+sourceSets.main.java.srcDirs = [ "src/main/java/" ]
+sourceSets.main.resources.srcDirs = ["src/main/resources/", "../assets/"]
 
 dependencies {
 
@@ -22,20 +17,39 @@ dependencies {
     api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
     api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
 
+    // LibGDX GUI Library
+    api "com.kotcrab.vis:vis-ui:$visuiVersion"
+
     // JSON
     implementation "com.google.code.gson:gson:2.10.1"
 
+    // TOML
+    implementation 'com.moandjiezana.toml:toml4j:0.7.2'
+
     // SVG
-    compileOnly "com.github.weisj:jsvg:1.4.0"
+    implementation "com.github.weisj:jsvg:1.4.0"
 
     // JavaScript
-    compileOnly 'org.openjdk.nashorn:nashorn-core:15.4'
+    implementation 'org.openjdk.nashorn:nashorn-core:15.4'
+
+    // Networking
+    implementation 'kryonet:kryonet:2.21'
+    implementation 'com.esotericsoftware.kryo:kryo:2.24.0'
+
+    // RCON
+    // I need to find an RCON server library for this
+
+    // Commands & basic CLI
+    compileOnly 'com.mojang:brigadier:1.0.18'
+    implementation 'info.picocli:picocli:4.7.6'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.6'
 
     // Other Utils
     compileOnly "org.jetbrains:annotations:23.0.0"
     implementation 'org.apache.commons:commons-lang3:3.14.0'
 
     // Mixin/Modding
+    // Mainly only in use of .zip mods now.
     implementation "org.ow2.asm:asm-tree:$asm_version"
     implementation "org.ow2.asm:asm-commons:$asm_version"
     implementation "org.ow2.asm:asm-util:$asm_version"

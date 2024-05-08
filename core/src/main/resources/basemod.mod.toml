@@ -1,0 +1,20 @@
+[mod]
+modId="basemod"
+version="d1.0.0"
+displayName="1D6 BaseMod"
+modURL="https://github.com/GirlInPurple/onedsix"
+license="GPL-v3.0"
+issueTracker="https://github.com/GirlInPurple/onedsix/issues"
+logoFile="logo.png"
+credits=["All 1D6 Contributors!"]
+authors=["TheColorBlurple"]
+description='''
+    A core addon for 1D6, most of the ecosystem relies on it.
+'''
+
+[[dependencies.basemod]]
+modId="onedsix"
+type="required"
+versionRange="[d1.0.0,)"
+ordering="NONE"
+side="BOTH"

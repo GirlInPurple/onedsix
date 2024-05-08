@@ -2,12 +2,9 @@ include 'core' // Core, everything depends on it
 include 'desktop' // Windows/Linux/Mac
 include 'server' // Server Software
 
+// This gate is mostly for unfinished modules/things that will immediately break Jitpack
 if (!System.env.JITPACK) {
     include 'basemod' // Official Base Mod
     include 'examplemod' // Example Mod
-
-    // Me messing around trying to get android to play nice and compile >:(
-    if (System.env.ANDROID) {
-        include 'android' // Android/Mobile
-    }
+    include 'loader' // Mod Loader
 }

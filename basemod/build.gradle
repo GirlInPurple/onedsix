@@ -1,5 +1,5 @@
 /*
-    This is an example on how your mod's build.gradle should look like, at least starting out.
+    This is an loader on how your mod's build.gradle should look like, at least starting out.
     It imports LibGDX, GSON, and 1D6 itself.
     With these you have basically everything you need to write a mod.
     If you need any help, feel free to reach out.
@@ -7,10 +7,15 @@
     Happy modding!
 */
 
-apply plugin: 'java'
-apply plugin: "java-library"
+plugins {
+    id 'java'
+    id "java-library"
+}
 group 'onedsix-basemod'
-version 'a0.1.0-0.1.0'
+version 'a1.0.0-d1.0.0'
+
+sourceSets.main.java.srcDirs = [ "src/main/java/" ]
+sourceSets.main.resources.srcDirs = ["src/main/resources/"]
 
 repositories {
     mavenCentral()
@@ -30,12 +35,11 @@ ext {
 }
 
 dependencies {
+    implementation project(":core")
 
-    // JSON
+    // JSON and TOML
     implementation 'com.google.code.gson:gson:2.8.9'
-
-    // 1D6
-    implementation 'com.github.GirlInPurple:onedsix:master-SNAPSHOT'
+    implementation 'com.moandjiezana.toml:toml4j:0.7.2'
 
     // LibGDX
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"

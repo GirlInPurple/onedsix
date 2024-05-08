@@ -1,6 +1,6 @@
 /*
-    This is an example on how your mod's build.gradle should look like, at least starting out.
-    It imports LibGDX, GSON, SLF4J, and 1D6 itself.
+    This is an loader on how your mod's build.gradle should look like, at least starting out.
+    It imports LibGDX, GSON, ByteBuddy, and 1D6 itself.
     With these you have basically everything you need to write a mod.
     If you need any help, feel free to reach out.
 
@@ -12,8 +12,8 @@ plugins {
     id "java-library"
 }
 
-group 'onedsix'
-version '1.0-SNAPSHOT'
+group 'examplemod'
+version 'd1.0.0' // Development 1.0.0
 
 repositories {
     mavenCentral()
@@ -22,13 +22,20 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/releases/" }
 }
 
+ext {
+    gdxVersion = '1.12.1'
+    roboVMVersion = '2.3.20'
+    box2DLightsVersion = '1.5'
+    ashleyVersion = '1.7.4'
+    aiVersion = '1.8.2'
+    gdxControllersVersion = '2.2.1'
+    byte_buddy_version = '1.14.14'
+}
+
 dependencies {
+
     // JSON
     implementation 'com.google.code.gson:gson:2.8.9'
-
-    // SLF4J
-    implementation "org.slf4j:slf4j-api:1.7.32"
-    implementation "ch.qos.logback:logback-classic:1.2.6"
 
     // 1D6
     implementation "com.github.GirlInPurple:onedsix:master-SNAPSHOT"
@@ -41,4 +48,8 @@ dependencies {
     api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
     api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+
+    // Mixin/Modding Utils
+    // This is completely optional, but you probably want it anyways
+    implementation "net.bytebuddy:byte-buddy:$byte_buddy_version"
 }

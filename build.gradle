@@ -1,7 +1,7 @@
 allprojects {
     apply plugin: "eclipse"
 
-    version = 'd1.0.0'
+    version = 'd1.1.0'
     ext {
         appName = "OneDSix"
         gdxVersion = '1.12.1'
@@ -10,6 +10,7 @@ allprojects {
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.2.1'
+        visuiVersion = '1.5.3'
     }
 
     repositories {
@@ -20,5 +21,6 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://jitpack.io" }
+        maven { url "https://libraries.minecraft.net" }
     }
 }

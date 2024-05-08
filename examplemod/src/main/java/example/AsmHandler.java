@@ -16,7 +16,7 @@ public class AsmHandler implements AsmPhaseListener {
     private static final Logger L = new Logger(AsmHandler.class);
     
     @Override
-    public void onAsm() {
+    public void onAsm(AsmPhaseEvent event) {
     
         try {
             

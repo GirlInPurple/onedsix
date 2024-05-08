@@ -1,0 +1,71 @@
+plugins {
+    id 'java'
+}
+
+group 'onedsix.loader'
+version 'd1.1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Testing
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    // JSON & TOML
+    implementation "com.google.code.gson:gson:2.10.1"
+    implementation 'com.moandjiezana.toml:toml4j:0.7.2'
+
+    // CLI
+    implementation 'info.picocli:picocli:4.7.6'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.6'
+
+    // Other Utils
+    compileOnly "org.jetbrains:annotations:23.0.0"
+    implementation 'org.apache.commons:commons-lang3:3.14.0'
+
+    // Mixin/Modding
+    implementation "org.ow2.asm:asm-tree:$asm_version"
+    implementation "org.ow2.asm:asm-commons:$asm_version"
+    implementation "org.ow2.asm:asm-util:$asm_version"
+    implementation "org.ow2.asm:asm-tree:$asm_version"
+    implementation "net.bytebuddy:byte-buddy:$byte_buddy_version"
+
+    /*
+    * Past this point, the only use for these dependencies is for accessing their classes.
+    */
+
+    // LibGDX
+    compileOnly "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compileOnly "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+    compileOnly "com.badlogicgames.ashley:ashley:$ashleyVersion"
+    compileOnly "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+    compileOnly "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    compileOnly "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
+    compileOnly "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+
+    // LibGDX GUI Library
+    compileOnly "com.kotcrab.vis:vis-ui:$visuiVersion"
+
+    // SVG
+    compileOnly "com.github.weisj:jsvg:1.4.0"
+
+    // JavaScript
+    compileOnly 'org.openjdk.nashorn:nashorn-core:15.4'
+
+    // Networking
+    compileOnly 'kryonet:kryonet:2.21'
+    compileOnly 'com.esotericsoftware.kryo:kryo:2.24.0'
+
+    // RCON
+    // I need to find an RCON server library for this
+
+    // Commands & basic CLI
+    compileOnly 'com.mojang:brigadier:1.0.18'
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,6 +1,0 @@
-{
-  "useSplashText": true,
-  "customPath": "./Path/To/Directory/",
-  "targetFps": 60,
-  "useVsync": true
-}
