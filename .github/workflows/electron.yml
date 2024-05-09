@@ -20,9 +20,11 @@ jobs:
           node-version: 18
 
       - name: Install Packages
+        working-directory: ./launcher
         run: npm ci
 
       - name: Build Launcher
+        working-directory: ./launcher
         run: npm run start
 
       - name: Capture Build Artifacts

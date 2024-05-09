@@ -5,6 +5,9 @@
  * `contextIsolation` is turned on. Use the contextBridge API in `preload.js`
  * to expose Node.js functionality from the main process.
  */
+import appendLog from './index.html'
+
+console.log($(document).children)
 
 document.getElementById('toggle-dark-mode').addEventListener('click', async () => {
     const isDarkMode = await window.darkMode.toggle();
@@ -21,4 +24,5 @@ document.getElementById('server').addEventListener('click', () => {
 
 window.java.onLog(loggerData => {
     console.log(loggerData);
+    appendLog("color=\"red\"", loggerData)
 });

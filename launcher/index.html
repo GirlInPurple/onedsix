@@ -1,34 +1,239 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta 
-    charset="UTF-8" 
-    http-equiv="Content-Security-Policy" 
-    content="style-src 'self' 'unsafe-inline'">
+	<head>
+		<!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+		<meta 
+		charset="UTF-8" 
+		http-equiv="Content-Security-Policy" 
+		content="style-src 'self' 'unsafe-inline'">
 
-    <link href="./styles.css" rel="stylesheet">
-    <title>1D6 Temporary Launcher</title>
-  </head>
-  <body>
-    <h1>1D6 Temporary Launcher</h1>
-    <p>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
-    Current theme source: <strong id="theme-source">System</strong>.
-    </p>
+		<script src="./libs/jquery-3.7.1.min.js"></script>
+		<link href="./styles.css" rel="stylesheet">
+		<title>1D6 Temporary Launcher</title>
+	</head>
+	<body>
+		<div id="nav">
+			<div>
+				<button type="instancesButton">Instances</button>
+				<div id="instancesCollapse">
+					<button type="instances">News</button>
+					<button type="manageInstances">News</button>
+					<button type="catalog">News</button>
+				</div>
+				<div style="display: none;">
+					<!-- https://www.svgrepo.com/svg/372781/world -->
+					<svg hidden="true" fill="#000000" viewBox="0 0 36 36" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+						<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+						<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+						<g id="SVGRepo_iconCarrier"> 
+							<title>world-line</title> 
+							<path d="M26.54,18a19.38,19.38,0,0,0-.43-4h3.6a12.3,12.3,0,0,0-.67-1.6H25.69A19.72,19.72,0,0,0,22.8,6.53a12.3,12.3,0,0,0-2.55-.76,17.83,17.83,0,0,1,3.89,6.59H18.75V5.6c-.25,0-.51,0-.77,0s-.49,0-.73,0v6.77H11.86a17.83,17.83,0,0,1,3.9-6.6,12.28,12.28,0,0,0-2.54.75,19.72,19.72,0,0,0-2.91,5.85H6.94A12.3,12.3,0,0,0,6.26,14H9.89a19.38,19.38,0,0,0-.43,4,19.67,19.67,0,0,0,.5,4.37H6.42A12.34,12.34,0,0,0,7.16,24h3.23a19.32,19.32,0,0,0,2.69,5.36,12.28,12.28,0,0,0,2.61.79A17.91,17.91,0,0,1,12,24h5.26v6.34c.24,0,.49,0,.73,0s.51,0,.77,0V24H24a17.9,17.9,0,0,1-3.7,6.15,12.28,12.28,0,0,0,2.62-.81A19.32,19.32,0,0,0,25.61,24h3.2a12.34,12.34,0,0,0,.74-1.6H26A19.67,19.67,0,0,0,26.54,18Zm-9.29,4.37H11.51a17.69,17.69,0,0,1-.09-8.4h5.83Zm7.24,0H18.75V14h5.83A18.21,18.21,0,0,1,25,18,18.12,18.12,0,0,1,24.49,22.37Z" class="clr-i-outline clr-i-outline-path-1"></path>
+							<path d="M18,2A16,16,0,1,0,34,18,16,16,0,0,0,18,2Zm0,30A14,14,0,1,1,32,18,14,14,0,0,1,18,32Z" class="clr-i-outline clr-i-outline-path-2"></path> 
+							<rect x="0" y="0" width="36" height="36" fill-opacity="0"></rect> 
+						</g>
+					</svg>
+					<!-- https://www.svgrepo.com/svg/372782/world-outline-badged -->
+					<svg hidden="true" fill="#000000" viewBox="0 0 36 36" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+						<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+						<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+						<g id="SVGRepo_iconCarrier"> 
+							<title>world-outline-badged</title> 
+							<path d="M33.12,12.81a7.44,7.44,0,0,1-1.91.58,14.05,14.05,0,1,1-8.6-8.6,7.43,7.43,0,0,1,.58-1.91,16.06,16.06,0,1,0,9.93,9.93Z" class="clr-i-outline--badged clr-i-outline-path-1--badged"></path>
+							<path d="M20.25,5.77a17.83,17.83,0,0,1,3.89,6.59H18.75V5.6c-.25,0-.51,0-.77,0s-.49,0-.73,0v6.77H11.86a17.83,17.83,0,0,1,3.9-6.6,12.28,12.28,0,0,0-2.54.75,19.72,19.72,0,0,0-2.91,5.85H6.94A12.3,12.3,0,0,0,6.26,14H9.89a19.38,19.38,0,0,0-.43,4,19.67,19.67,0,0,0,.5,4.37H6.42A12.34,12.34,0,0,0,7.16,24h3.23a19.32,19.32,0,0,0,2.69,5.36,12.28,12.28,0,0,0,2.61.79A17.91,17.91,0,0,1,12,24h5.26v6.34c.24,0,.49,0,.73,0s.51,0,.77,0V24H24a17.9,17.9,0,0,1-3.7,6.15,12.28,12.28,0,0,0,2.62-.81A19.32,19.32,0,0,0,25.61,24h3.2a12.34,12.34,0,0,0,.74-1.6H26a19.67,19.67,0,0,0,.5-4.37,19.38,19.38,0,0,0-.43-4h3.6c-.06-.17-.12-.33-.19-.49a7.45,7.45,0,0,1-3.47-1.11h-.36c0-.11-.08-.21-.11-.32a7.48,7.48,0,0,1-3.06-5.62A12.41,12.41,0,0,0,20.25,5.77Zm-3,16.59H11.51a17.69,17.69,0,0,1-.09-8.4h5.83ZM25,18a18.12,18.12,0,0,1-.55,4.37H18.75V14h5.83A18.21,18.21,0,0,1,25,18Z" class="clr-i-outline--badged clr-i-outline-path-2--badged"></path>
+							<circle cx="30" cy="6" r="5" class="clr-i-outline--badged clr-i-outline-path-3--badged clr-i-badge"></circle> 
+							<rect x="0" y="0" width="36" height="36" fill-opacity="0"></rect> 
+						</g>
+					</svg>
+				</div>
+			</div>
+			<div>
+				<button type="newsButton">News</button>
+				<div id="newsCollapse">
+					<button type="frontpage">News</button>
+					<button type="newMods">News</button>
+					<button type="updates">News</button>
+					<button type="technical">News</button>
+				</div>
+				<div style="display: none;">
+					<!-- https://www.svgrepo.com/svg/489524/news -->
+					<svg hidden="true" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+						<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+						<g id="SVGRepo_iconCarrier"> 
+							<g clip-path="url(#clip0_429_11031)"> 
+								<path d="M3 4V18C3 19.1046 3.89543 20 5 20H17H19C20.1046 20 21 19.1046 21 18V8H17" stroke="#292929" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+								<path d="M3 4H17V18C17 19.1046 17.8954 20 19 20V20" stroke="#292929" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+								<path d="M13 8L7 8" stroke="#292929" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+								<path d="M13 12L9 12" stroke="#292929" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+							</g> 
+							<defs> 
+								<clipPath id="clip0_429_11031"> 
+									<rect width="24" height="24" fill="white"></rect> 
+								</clipPath> 
+							</defs> 
+						</g>
+					</svg>
+					<!-- Badged -->
+					<svg hidden="true" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+						<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+						<g id="SVGRepo_iconCarrier"> 
+							<g clip-path="url(#clip0_429_11031)"> 
+								<path d="M3 4V18C3 19.1046 3.89543 20 5 20H17H19C20.1046 20 21 19.1046 21 18V8H17" stroke="#292929" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+								<path d="M3 4H17V18C17 19.1046 17.8954 20 19 20V20" stroke="#292929" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+								<path d="M13 8L7 8" stroke="#292929" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+								<path d="M13 12L9 12" stroke="#292929" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+								<circle cx="30" cy="6" r="5" class="clr-i-outline--badged clr-i-outline-path-3--badged clr-i-badge"></circle> 
+							</g> 
+							<defs> 
+								<clipPath id="clip0_429_11031"> 
+									<rect width="24" height="24" fill="white"></rect> 
+								</clipPath> 
+							</defs> 
+						</g>
+					</svg>
+				</div>
+			</div>
+			<div>
+				<button type="settingsButton">Settings</button>
+				<div id="settingsCollapse">
+					<button type="general">General</button>
+					<button type="account">Account</button>
+					<button type="info">Info</button>
+				</div>
+				<div style="display: none;">
+					<!-- https://www.svgrepo.com/svg/17716/gear -->
+					<svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" xml:space="preserve">
+						<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+						<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+						<g id="SVGRepo_iconCarrier"> 
+							<g> 
+								<g> 
+									<path d="M43.454,18.443h-2.437c-0.453-1.766-1.16-3.42-2.082-4.933l1.752-1.756c0.473-0.473,0.733-1.104,0.733-1.774 c0-0.669-0.262-1.301-0.733-1.773l-2.92-2.917c-0.947-0.948-2.602-0.947-3.545-0.001l-1.826,1.815 C30.9,6.232,29.296,5.56,27.529,5.128V2.52c0-1.383-1.105-2.52-2.488-2.52h-4.128c-1.383,0-2.471,1.137-2.471,2.52v2.607 c-1.766,0.431-3.38,1.104-4.878,1.977l-1.825-1.815c-0.946-0.948-2.602-0.947-3.551-0.001L5.27,8.205 C4.802,8.672,4.535,9.318,4.535,9.978c0,0.669,0.259,1.299,0.733,1.772l1.752,1.76c-0.921,1.513-1.629,3.167-2.081,4.933H2.501 C1.117,18.443,0,19.555,0,20.935v4.125c0,1.384,1.117,2.471,2.501,2.471h2.438c0.452,1.766,1.159,3.43,2.079,4.943l-1.752,1.763 c-0.474,0.473-0.734,1.106-0.734,1.776s0.261,1.303,0.734,1.776l2.92,2.919c0.474,0.473,1.103,0.733,1.772,0.733 s1.299-0.261,1.773-0.733l1.833-1.816c1.498,0.873,3.112,1.545,4.878,1.978v2.604c0,1.383,1.088,2.498,2.471,2.498h4.128 c1.383,0,2.488-1.115,2.488-2.498v-2.605c1.767-0.432,3.371-1.104,4.869-1.977l1.817,1.812c0.474,0.475,1.104,0.735,1.775,0.735 c0.67,0,1.301-0.261,1.774-0.733l2.92-2.917c0.473-0.472,0.732-1.103,0.734-1.772c0-0.67-0.262-1.299-0.734-1.773l-1.75-1.77 c0.92-1.514,1.627-3.179,2.08-4.943h2.438c1.383,0,2.52-1.087,2.52-2.471v-4.125C45.973,19.555,44.837,18.443,43.454,18.443z M22.976,30.85c-4.378,0-7.928-3.517-7.928-7.852c0-4.338,3.55-7.85,7.928-7.85c4.379,0,7.931,3.512,7.931,7.85 C30.906,27.334,27.355,30.85,22.976,30.85z"></path> 
+								</g> 
+							</g> 
+						</g>
+					</svg>
+					<!-- Badged -->
+					<svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" xml:space="preserve">
+						<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+						<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+						<g id="SVGRepo_iconCarrier"> 
+							<g> 
+								<g> 
+									<path d="M43.454,18.443h-2.437c-0.453-1.766-1.16-3.42-2.082-4.933l1.752-1.756c0.473-0.473,0.733-1.104,0.733-1.774 c0-0.669-0.262-1.301-0.733-1.773l-2.92-2.917c-0.947-0.948-2.602-0.947-3.545-0.001l-1.826,1.815 C30.9,6.232,29.296,5.56,27.529,5.128V2.52c0-1.383-1.105-2.52-2.488-2.52h-4.128c-1.383,0-2.471,1.137-2.471,2.52v2.607 c-1.766,0.431-3.38,1.104-4.878,1.977l-1.825-1.815c-0.946-0.948-2.602-0.947-3.551-0.001L5.27,8.205 C4.802,8.672,4.535,9.318,4.535,9.978c0,0.669,0.259,1.299,0.733,1.772l1.752,1.76c-0.921,1.513-1.629,3.167-2.081,4.933H2.501 C1.117,18.443,0,19.555,0,20.935v4.125c0,1.384,1.117,2.471,2.501,2.471h2.438c0.452,1.766,1.159,3.43,2.079,4.943l-1.752,1.763 c-0.474,0.473-0.734,1.106-0.734,1.776s0.261,1.303,0.734,1.776l2.92,2.919c0.474,0.473,1.103,0.733,1.772,0.733 s1.299-0.261,1.773-0.733l1.833-1.816c1.498,0.873,3.112,1.545,4.878,1.978v2.604c0,1.383,1.088,2.498,2.471,2.498h4.128 c1.383,0,2.488-1.115,2.488-2.498v-2.605c1.767-0.432,3.371-1.104,4.869-1.977l1.817,1.812c0.474,0.475,1.104,0.735,1.775,0.735 c0.67,0,1.301-0.261,1.774-0.733l2.92-2.917c0.473-0.472,0.732-1.103,0.734-1.772c0-0.67-0.262-1.299-0.734-1.773l-1.75-1.77 c0.92-1.514,1.627-3.179,2.08-4.943h2.438c1.383,0,2.52-1.087,2.52-2.471v-4.125C45.973,19.555,44.837,18.443,43.454,18.443z M22.976,30.85c-4.378,0-7.928-3.517-7.928-7.852c0-4.338,3.55-7.85,7.928-7.85c4.379,0,7.931,3.512,7.931,7.85 C30.906,27.334,27.355,30.85,22.976,30.85z"></path> 
+								</g> 
+							</g> 
+						</g>
+						<circle cx="30" cy="6" r="5" class="clr-i-outline--badged clr-i-outline-path-3--badged clr-i-badge"></circle> 
+					</svg>
+				</div>
+			</div>
+		</div>
+		<div id="content">
+			<div id="instanceInterface">
+				<p>
+				<span id="instanceStatus">Idling</span> 1D6 <span id="instanceVersion"></span>!
+				<span id="instanceModCount"></span> mods loaded,
+				<abbr title="This count is probably wrong! It takes into account both client and server-sided mods the same, so this could be off by a very wide margin!">
+					<span id="instanceCompatibleServers"></span> compatible server(s)
+				</abbr>,
 
-    <button id="toggle-dark-mode">Toggle Dark Mode</button>
-    <br>
-    <button id="desktop" type="button">Launch Desktop Client</button>
-    <button id="server" type="button">Launch Dedicated Server</button>
+				</p>
 
-    <!-- Main script, alot of the website is coded here. -->
-    <script type="text/javascript">
+				<button id="toggle-dark-mode">Toggle Dark Mode</button>
+				<br>
+				<button id="desktop" type="button">Launch Desktop Client</button>
+				<button id="server" type="button">Launch Dedicated Server</button>
+				<br>
+				<div id="gameLogger"></div>
+			</div>
+			<div id="frontpage">
+				<h1>1D6 Temporary Launcher</h1>
 
-    </script>
-    <!-- Needs to be loaded last! -->
-    <script type="text/javascript" src="./renderer.js"></script>
-  </body>
+				<button id="toggle-dark-mode">Toggle Dark Mode</button>
+				<br>
+				<button id="desktop" type="button">Launch Desktop Client</button>
+				<button id="server" type="button">Launch Dedicated Server</button>
+			</div>
+			<div id="info">
+				<p id="infoParagraph">
+				Node.js <span id="nodeVersion"></span>;
+				Chromium <span id="chromeVersion"></span>;
+				Electron <span id="electronVersion"></span>;
+				Current Theme Source: <span id="themeVersion"></span>;
+				Python Installed? <span id="pythonVersion"></span>;
+				Java Installed? <span id="javaVersion"></span>;
+				</p>
+			</div>
+		</div>
+
+		<!-- Main script, the rest of the launcher is here. -->
+		<script type="module">
+
+			$(document).ready(() => {
+				console.log(`jquery 3.7.1 is installed`);
+				updateInfoText();
+				updateInstanceLauncherText(0, "DEBUG", 2, 0);
+			})
+
+			// Instance Interface
+			const statuses = [
+				"Idling",
+				"Launching",
+				"Loading",
+				"Playing"
+			]
+
+			/**
+			 * @param {int} status - the position in @see statuses this instance correlates to.
+			 * @param {string} version - the version of the game that is being run
+			 * @param {int} modCount - the mod count
+			 * @param {int} compatibleServers - an estimate on how many compatible servers exist with this pack
+			*/
+			function updateInstanceLauncherText(status, version, modCount, compatibleServers ) {
+
+				$("instanceStatus").text = statuses[status]
+				$("instanceVersion").text = statuses[status]
+				$("instanceModCount").text = statuses[status]
+				$("instanceCompatibleServers").text = statuses[status]
+
+			}
+
+			/**
+			 * @param {int} level - the logging level being logged.
+			 * @param {string} text - the text from that log.
+			*/
+			function appendLog(level, text) {
+				$("gameLogger").append(
+					`<span style="${level}">${text}</span>`
+				)
+			}
+
+			// Info Page
+			const versionList = {
+				"node": process.versions['node'],
+				"chrome": process.versions['chrome'],
+				"electron": process.versions['electron'],
+				"theme": "System",
+				"python": "NYI",
+				"java": "NYI"
+			}
+
+			function updateInfoText() {
+
+				$("infoParagraph").find("span").
+
+				versionList.array.forEach((value, key) => {
+					console.log(values, keys);
+				});
+
+			}
+
+			module.exports = { appendLog }
+
+		</script>
+		<!-- Needs to be loaded last! -->
+		<script type="module" src="./renderer.js"></script>
+	</body>
 </html>

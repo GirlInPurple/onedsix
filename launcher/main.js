@@ -1,19 +1,30 @@
-const { app, BrowserWindow, ipcMain, nativeTheme  } = require('electron/main')
-const path = require('node:path')
+const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron/main')
+const { downloadFile } = require('./network');
 const { spawn } = require('child_process');
+const path = require('node:path');
+const fs = require('fs-extra');
 
 let mainWindow;
 
-function createWindow () {
+function createEnviron() {
+  fs.ensureDir("./instances/")
+  fs.ensureDir("./cache/")
+  fs.ensureFile("./settings.json")
+  downloadFile(new URL("https://raw.githubusercontent.com/GirlInPurple/onedsix/master/assets/icon.png"), "./cache/icon.png")
+}
+
+function createWindow() {
   
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1600,
+    height: 1200,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   })
+  mainWindow.setMenu(null);
   mainWindow.loadFile('index.html')
+  mainWindow.setIcon("./cache/icon.png")
 
   // Opens the DevTools.
   mainWindow.webContents.openDevTools()
@@ -50,6 +61,7 @@ ipcMain.handle('java:start', (event, app) => {
 })
 
 app.whenReady().then(() => {
+  createEnviron();
   createWindow();
 
   app.on('activate', function () {
