@@ -36,6 +36,15 @@ ext {
 
 dependencies {
     implementation project(":core")
+	implementation project(":loader")
+
+	// Utilities
+	implementation 'org.projectlombok:lombok:1.18.32'
+	annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+	// Logging
+	implementation "org.slf4j:slf4j-api:1.7.32"
+	implementation "ch.qos.logback:logback-classic:1.2.6"
 
     // JSON and TOML
     implementation 'com.google.code.gson:gson:2.8.9'
@@ -49,4 +58,13 @@ dependencies {
     implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     implementation "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
     implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+
+	// Mixin
+	implementation "org.spongepowered:mixin:0.8.5"
+	annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+	api "org.ow2.asm:asm:9.3"
+	api "org.ow2.asm:asm-tree:9.3"
+	api "org.ow2.asm:asm-util:9.3"
+	api "org.ow2.asm:asm-commons:9.3"
+	api 'com.google.guava:guava:31.1-jre'
 }

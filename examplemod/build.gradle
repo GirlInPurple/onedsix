@@ -34,11 +34,12 @@ ext {
 
 dependencies {
 
-    // JSON
-    implementation 'com.google.code.gson:gson:2.8.9'
+	// 1D6
+	implementation "com.github.GirlInPurple:onedsix:master-SNAPSHOT"
 
-    // 1D6
-    implementation "com.github.GirlInPurple:onedsix:master-SNAPSHOT"
+	// JSON and TOML
+	implementation 'com.google.code.gson:gson:2.8.9'
+	implementation 'com.moandjiezana.toml:toml4j:0.7.2'
 
     // LibGDX
     api "com.badlogicgames.gdx:gdx:$gdxVersion"

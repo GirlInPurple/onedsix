@@ -11,19 +11,14 @@ import com.badlogic.gdx.utils.viewport.*;
 import com.esotericsoftware.kryonet.*;
 import com.google.gson.Gson;
 import com.moandjiezana.toml.Toml;
-import onedsix.core.client.graphics.screens.*;
+import onedsix.client.graphics.screens.*;
 import onedsix.core.util.EnvType;
 import onedsix.core.util.KeyCalls;
 import onedsix.core.util.Logger;
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.dynamic.DynamicType;
-import onedsix.core.client.graphics.screens.*;
 import onedsix.core.systems.DatagenHandler;
 import onedsix.core.assets.abstracts.Asset;
-import onedsix.core.client.graphics.GeometryHandler;
-import onedsix.core.systems.Player;
-import onedsix.core.util.*;
+import onedsix.client.graphics.GeometryHandler;
+import onedsix.client.ClientPlayer;
 import onedsix.core.util.Logger.LoadingLogs;
 
 import javax.script.*;
@@ -45,9 +40,9 @@ public class Vars {
      * */
     public static int currentPhase;
     /** Internal ID, used for mod compatibility */
-    public static final String MOD_ID = "main/java/onedsix";
+    public static final String MOD_ID = "onedsix";
     /** Current environment the game is running in. */
-    public static EnvType envType;
+    public static EnvType envType = new EnvType(false);
     /** Preferred language of the user. */
     public static Locale locale = Locale.getDefault();
     /** Logs for when the game is loading. */
@@ -122,7 +117,7 @@ public class Vars {
     public static ModListScreen modListScreen;
     public static SinglePlayerScreen singlePlayerScreen;
     /** The player instance, created at startup */
-    public static Player player;
+    public static ClientPlayer player;
     /** The global KyroNet instance.<br>Checking if it is {@link Client} or {@link Server} is necessary at all times. */
     public static EndPoint networker;
     /**
@@ -147,10 +142,10 @@ public class Vars {
     public static int centralPort = 80;
     /** Used for zip mods. */
     public static ScriptEngine scriptEngine;
-    
+
     /** Init variables only meant for the OndsixClient. */
     public static void clientInit() {
-        envType = new EnvType();
+        envType = new EnvType(false);
         environment = new Environment();
         cam3D = new PerspectiveCamera(50, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camHUD = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -171,26 +166,28 @@ public class Vars {
         networker = new Client();
         globalInit();
     }
-    
+
     /** Init variables only meant for Servers. */
     public static void serverInit() {
         envType = new EnvType(true);
         networker = new Server();
         globalInit();
     }
-    
+
     /** Init variables meant for both. */
     static void globalInit() {
         scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");
         scriptEngine.put("console", new Logger(ScriptEngine.class));
-        scriptEngine.put("ByteBuddy", ByteBuddy.class);
         scriptEngine.put("Class", Class.class);
-        scriptEngine.put("DynamicType", DynamicType.class);
-        scriptEngine.put("TypeResolution", TypeDescription.Generic.class);
         scriptEngine.put("Method", Method.class);
-        scriptEngine.put("TypeDescription", TypeDescription.class);
         scriptEngine.put("Gson", Gson.class);
         scriptEngine.put("Toml", Toml.class);
         scriptEngine.put("Asset", Asset.class);
+		/*
+		scriptEngine.put("TypeDescription", TypeDescription.class);
+		scriptEngine.put("DynamicType", DynamicType.class);
+		scriptEngine.put("TypeResolution", TypeDescription.Generic.class);
+		scriptEngine.put("ByteBuddy", ByteBuddy.class);
+	 	*/
     }
 }

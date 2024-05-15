@@ -1,21 +1,18 @@
 package basemod;
 
-import com.moandjiezana.toml.Toml;
+import lombok.extern.slf4j.Slf4j;
+import onedsix.loader.api.event.Initialization.*;
 import onedsix.core.util.Logger;
 
 @SuppressWarnings("unused")
-public class BaseMod implements ModStartupListener, AsmPhaseListener {
-    
+@Slf4j
+public class BaseMod implements InitializeListener {
+
     private static final Logger L = new Logger(BaseMod.class);
     public static final String MOD_ID = "basemod";
-    
-    @Override
-    public void onStartup(ModStartupEvent event, Toml[] otherMods) {
-        L.info("Started!");
-    }
-    
-    @Override
-    public void onAsm(AsmPhaseEvent event, Toml[] otherMods) {
-        L.info("ASM Phase!");
-    }
+
+	@Override
+	public void onInitialize(InitialzeEvent event) {
+		log.info("Basemod Has Loaded!");
+	}
 }

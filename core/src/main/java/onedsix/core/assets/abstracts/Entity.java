@@ -9,7 +9,7 @@ public abstract class Entity extends Asset {
     /*
     Currently migrating this over to the attribute system and removing Lombok.
     Do not remove!
-    
+
     @Getter @Setter private HashMap<Decal, Long> queuedFrames;
     @Getter @Setter private long sinceLastFrame;
     @Getter @Setter private int level;
@@ -76,10 +76,10 @@ public abstract class Entity extends Asset {
         this.speed = 5f;
         this.position = position;
     }
-    
+
     /** Cycles between a set of frames, used for animations. */
     public void cycleFrames() {}
-    
-    /** Is called for every entity, every frame/server tick. Be careful what you put here! */
+
+    /** Is called for every data, every frame/server tick. Be careful what you put here! */
     public abstract Object perFrame();
 }

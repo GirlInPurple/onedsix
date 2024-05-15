@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Recipe {
-    
+
     public final Map<Item, Integer> itemsNeeded;
     public final Map<Faction, Integer> factionsNeeded;
     public final List<Perk> perksNeeded;

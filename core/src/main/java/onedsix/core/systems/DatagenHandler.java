@@ -14,17 +14,18 @@ import com.google.gson.JsonObject;
 import onedsix.core.Vars;
 import onedsix.core.assets.data.Attributes;
 import onedsix.core.assets.data.Identifier;
-import onedsix.core.client.graphics.GeometryHandler;
+import onedsix.client.ClientPlayer;
+import onedsix.client.graphics.GeometryHandler;
 import onedsix.core.util.FileHandler;
 import onedsix.core.util.Logger;
 import onedsix.core.util.Logger.Level;
 
-import static onedsix.core.client.graphics.SvgHandler.loadSvgFromFile;
-import static onedsix.core.client.graphics.SvgHandler.svgToPng;
+import static onedsix.client.graphics.SvgHandler.loadSvgFromFile;
+import static onedsix.client.graphics.SvgHandler.svgToPng;
 
 public class DatagenHandler {
     private static final Logger L = new Logger(DatagenHandler.class);
-    
+
     public final String name;
     public final JsonObject jo;
     public final JsonArray geometry;
@@ -39,9 +40,9 @@ public class DatagenHandler {
         this.npcs = jo.getAsJsonArray("npc");
         this.stats = jo.getAsJsonObject("stats");
         this.misc = jo.getAsJsonObject("misc");
-        
+
         long startTime = System.nanoTime();
-        
+
         try {
             buildGeom(this);
             buildEntities(this);
@@ -57,7 +58,7 @@ public class DatagenHandler {
             L.info("Built Datagen! Elapsed Time: " + seconds + " seconds");
         }
     }
-    
+
     public static void read() {
         // slow? yes.
         // can it use runnable? gl crashes if it does.
@@ -65,10 +66,10 @@ public class DatagenHandler {
         for (String s : Vars.loadList) {
             try {
                 JsonObject js;
-    
+
                 L.loadingLogger("Reading " + s, Level.INFO);
                 js = FileHandler.RESOURCES.getJson(s);
-    
+
                 if (js != null) {
                     L.loadingLogger("Datagen started for " + s, Level.INFO);
                     if (s.equals("playerdata.json")) {
@@ -84,11 +85,11 @@ public class DatagenHandler {
                 L.error(e.getMessage(), e);
             }
         }
-        
+
         if (!Vars.loadList.isEmpty()) L.loadingLogger("Finished loading datagen!", Level.INFO);
         Vars.loadList.clear();
     }
-    
+
     public static void buildGeom(DatagenHandler dgh) {
         for (JsonElement je : dgh.geometry.asList()) {
             switch (je.getAsJsonObject().get("model_type").getAsString()) {
@@ -110,30 +111,30 @@ public class DatagenHandler {
             }
         }
     }
-    
+
     public static void buildEntities(DatagenHandler dgh) {
         for (JsonElement je : dgh.npcs.asList()) {
-            L.info("Would be creating an entity right now!");
+            L.info("Would be creating an data right now!");
             je.getAsJsonObject().get("model_type").getAsString();
         }
     }
-    
+
     public static void buildCellStats(DatagenHandler dgh) {
         L.info("Would be handling cell stats right now!");
     }
-    
+
     public static void buildEntityStats(JsonObject JO) {
-        L.info("Would be handling entity stats right now!");
+        L.info("Would be handling data stats right now!");
     }
-    
+
     public static void buildPlayer(JsonObject playerdata) {
         L.loadingLogger("Loading Playerdata...", Level.INFO);
         //Texture t = new Texture(svgToPng(loadSvgFromString(playerdata.get("svg").getAsString()), "player"));
         Texture t = new Texture(svgToPng(loadSvgFromFile(Gdx.files.internal("test.svg").path()), "player"));
         JsonArray pos = playerdata.get("position").getAsJsonArray();
-        
-        Vars.player = new Player(
-                new Identifier<>(Player.class, Vars.MOD_ID),
+
+        Vars.player = new ClientPlayer(
+                new Identifier<>(ClientPlayer.class, Vars.MOD_ID),
                 new Attributes(),
                 Decal.newDecal(2, 2, new TextureRegion(t), true),
                 "player",

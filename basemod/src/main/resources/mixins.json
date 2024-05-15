@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "basemod.mixins",
+  "priority": 2147483647,
+  "minVersion": "0.8.5",
+  "mixins": [
+    "EntryMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

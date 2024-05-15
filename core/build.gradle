@@ -3,8 +3,25 @@ apply plugin: "java-library"
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-sourceSets.main.java.srcDirs = [ "src/main/java/" ]
-sourceSets.main.resources.srcDirs = ["src/main/resources/", "../assets/"]
+sourceSets {
+	server {
+		java {
+			srcDirs = ["src/main/java/"]
+		}
+		resources {
+			srcDirs = ["src/main/resources/", "../assets/"]
+		}
+	}
+
+	client {
+		java {
+			srcDirs = ["src/main/java/"]
+		}
+		resources {
+			srcDirs = ["src/main/resources/", "../assets/"]
+		}
+	}
+}
 
 dependencies {
 
@@ -16,6 +33,21 @@ dependencies {
     api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
     api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+
+	// Desktop Specific
+	api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+	api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+	api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+	api "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
+	api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+
+	// Utilities
+	implementation 'org.projectlombok:lombok:1.18.32'
+	annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+	// Logging
+	implementation "org.slf4j:slf4j-api:1.7.32"
+	implementation "ch.qos.logback:logback-classic:1.2.6"
 
     // LibGDX GUI Library
     api "com.kotcrab.vis:vis-ui:$visuiVersion"
@@ -36,10 +68,7 @@ dependencies {
     implementation 'kryonet:kryonet:2.21'
     implementation 'com.esotericsoftware.kryo:kryo:2.24.0'
 
-    // RCON
-    // I need to find an RCON server library for this
-
-    // Commands & basic CLI
+    // Commands & CLI
     compileOnly 'com.mojang:brigadier:1.0.18'
     implementation 'info.picocli:picocli:4.7.6'
     annotationProcessor 'info.picocli:picocli-codegen:4.7.6'
@@ -47,14 +76,25 @@ dependencies {
     // Other Utils
     compileOnly "org.jetbrains:annotations:23.0.0"
     implementation 'org.apache.commons:commons-lang3:3.14.0'
-
-    // Mixin/Modding
-    // Mainly only in use of .zip mods now.
-    implementation "org.ow2.asm:asm-tree:$asm_version"
-    implementation "org.ow2.asm:asm-commons:$asm_version"
-    implementation "org.ow2.asm:asm-util:$asm_version"
-    implementation "org.ow2.asm:asm-tree:$asm_version"
-    implementation "net.bytebuddy:byte-buddy:$byte_buddy_version"
 }
 
-eclipse.project.name = appName + "-core"
+configurations {
+	serverCompile.extendsFrom compile
+	clientCompile.extendsFrom compile
+}
+
+task serverJar(type: Jar) {
+	from sourceSets.server.output
+	manifest {
+		attributes 'Main-Class': 'onedsix.core.server.OnedsixServer'
+	}
+	archiveFileName = appName + 'server.jar'
+}
+
+task clientJar(type: Jar) {
+	from sourceSets.client.output
+	manifest {
+		attributes 'Main-Class': 'onedsix.core.client.OndsixClient'
+	}
+	archiveFileName = appName + '-client.jar'
+}

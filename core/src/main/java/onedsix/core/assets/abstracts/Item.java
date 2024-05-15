@@ -3,7 +3,7 @@ package onedsix.core.assets.abstracts;
 import com.badlogic.gdx.graphics.g3d.Model;
 import onedsix.core.assets.data.Attributes;
 import onedsix.core.assets.data.Identifier;
-import onedsix.core.systems.Player;
+import onedsix.client.ClientPlayer;
 import onedsix.core.assets.data.Recipe;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +19,7 @@ public abstract class Item extends Asset {
         this.recipe = recipe;
         this.roughCost = roughCost;
     }
-    
+
     public Item(Identifier<? extends Item> ident, Attributes attributes, @Nullable String name, String[] flavorText, Model model, int level, Recipe recipe, long roughCost) {
         super(ident, attributes, name);
         this.flavorText = flavorText;
@@ -42,11 +42,11 @@ public abstract class Item extends Asset {
         return amount;
     }
     /** Called whenever the item is on the ground in a cell and the player interacts with it. */
-    public abstract void onInteract(Player player);
+    public abstract void onInteract(ClientPlayer player);
     /** Called whenever the item is on the ground in a cell and the player interacts with it during battle. */
-    public abstract void onInteractBattle(Player player);
+    public abstract void onInteractBattle(ClientPlayer player);
     /** Called whenever the item is used when inside the player's inventory. */
-    public abstract void onUse(Player player);
+    public abstract void onUse(ClientPlayer player);
     /** Called whenever the item is used when inside the player's inventory during battle. */
-    public abstract void onUseBattle(Player player);
+    public abstract void onUseBattle(ClientPlayer player);
 }

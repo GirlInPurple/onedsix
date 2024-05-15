@@ -1,71 +1,107 @@
 plugins {
     id 'java'
+    id 'java-library'
+    id 'application'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
-group 'onedsix.loader'
-version 'd1.1.0'
+project.version = '1.0.0' // Based off MiniMods 0.4.0
+sourceCompatibility = 8
+mainClassName = 'onedsix.loader.core.LoaderInitialization'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-repositories {
-    mavenCentral()
-}
+sourceSets.main.java.srcDirs = [ "src/main/java/" ]
+sourceSets.main.resources.srcDirs = ["src/main/resources/", "../assets/"]
 
 dependencies {
-    // Testing
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    // Pull from Core
+    implementation project(":core")
 
-    // JSON & TOML
-    implementation "com.google.code.gson:gson:2.10.1"
-    implementation 'com.moandjiezana.toml:toml4j:0.7.2'
+    // Main Loader dependencies.
+    implementation "org.spongepowered:mixin:0.8.5"
+    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+    implementation "net.java.dev.jna:jna:5.12.1"
+    implementation "net.java.dev.jna:jna-platform:5.12.1"
+    implementation "com.github.oshi:oshi-core:6.2.2"
+    api "com.electronwill.night-config:toml:3.6.0"
+    runtimeOnly 'net.minecraftforge:accesstransformers:8.0.4'
+    implementation 'org.apache.maven:maven-artifact:3.8.1'
+	compileOnly "org.jetbrains:annotations:23.0.0"
 
-    // CLI
-    implementation 'info.picocli:picocli:4.7.6'
-    annotationProcessor 'info.picocli:picocli-codegen:4.7.6'
+	// JSON & TOML
+	api 'org.json:json:20210307' // TODO: move from org.json:json to google:gson
+	implementation "com.google.code.gson:gson:2.10.1"
+	implementation 'com.moandjiezana.toml:toml4j:0.7.2'
 
-    // Other Utils
-    compileOnly "org.jetbrains:annotations:23.0.0"
-    implementation 'org.apache.commons:commons-lang3:3.14.0'
+	// Utilities
+	implementation 'org.projectlombok:lombok:1.18.32'
+	annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
-    // Mixin/Modding
-    implementation "org.ow2.asm:asm-tree:$asm_version"
-    implementation "org.ow2.asm:asm-commons:$asm_version"
-    implementation "org.ow2.asm:asm-util:$asm_version"
-    implementation "org.ow2.asm:asm-tree:$asm_version"
-    implementation "net.bytebuddy:byte-buddy:$byte_buddy_version"
+	// Logging
+	implementation "org.slf4j:slf4j-api:1.7.32"
+	implementation "ch.qos.logback:logback-classic:1.2.6"
 
-    /*
-    * Past this point, the only use for these dependencies is for accessing their classes.
-    */
-
-    // LibGDX
-    compileOnly "com.badlogicgames.gdx:gdx:$gdxVersion"
-    compileOnly "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-    compileOnly "com.badlogicgames.ashley:ashley:$ashleyVersion"
-    compileOnly "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-    compileOnly "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-    compileOnly "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
-    compileOnly "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-
-    // LibGDX GUI Library
-    compileOnly "com.kotcrab.vis:vis-ui:$visuiVersion"
-
-    // SVG
-    compileOnly "com.github.weisj:jsvg:1.4.0"
-
-    // JavaScript
-    compileOnly 'org.openjdk.nashorn:nashorn-core:15.4'
-
-    // Networking
-    compileOnly 'kryonet:kryonet:2.21'
-    compileOnly 'com.esotericsoftware.kryo:kryo:2.24.0'
-
-    // RCON
-    // I need to find an RCON server library for this
-
-    // Commands & basic CLI
-    compileOnly 'com.mojang:brigadier:1.0.18'
+    // Dependencies of SpongePowered:Mixin.
+    api "org.ow2.asm:asm:9.3"
+    api "org.ow2.asm:asm-tree:9.3"
+    api "org.ow2.asm:asm-util:9.3"
+    api "org.ow2.asm:asm-commons:9.3"
+    api 'com.google.guava:guava:31.1-jre'
 }
 
-test {
-    useJUnitPlatform()
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = configurations.compileClasspath
+}
+
+jar {
+
+    delete(file("build/distributable"))
+    file("build/distributable/lib").mkdirs()
+    def paths = [];
+    configurations.runtimeClasspath.each { dir ->
+        def des = "lib/"
+        paths.add(des + dir.getName())
+        copy {
+            from dir
+            into "build/distributable/" + des
+        }
+    }
+
+    archivesBaseName = "minimods"
+    archiveClassifier.set('')
+
+    manifest {
+        attributes(
+			'Main-Class': mainClassName,
+			'Implementation-Title': project.name,
+			'Implementation-Version': project.version,
+			'SplashScreen-Image': "Minicraft_Splash_Screen_3.png",
+			'Class-Path': String.join(" ", paths) // Adding class paths
+		)
+    }
+}
+
+shadowJar {
+	distTar.enabled = false
+	distZip.enabled = false
+	shadowDistTar.enabled = false
+	shadowDistZip.enabled = false
+
+    archivesBaseName = "minimods"
+
+    manifest {
+        attributes(
+			'Main-Class': mainClassName,
+			'Implementation-Title': project.name,
+			'Implementation-Version': project.version,
+			'SplashScreen-Image': "Minicraft_Splash_Screen_3.png",
+		)
+    }
 }
