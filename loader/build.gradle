@@ -39,7 +39,7 @@ dependencies {
 
 	// Logging
 	implementation "org.slf4j:slf4j-api:1.7.32"
-	implementation "ch.qos.logback:logback-classic:1.2.6"
+	implementation "ch.qos.logback:logback-classic:1.2.13"
 
     // Dependencies of SpongePowered:Mixin.
     api "org.ow2.asm:asm:9.3"
