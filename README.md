@@ -1,3 +1,5 @@
+# [Moved!](https://github.com/OneDSix/onedsix)
+
 # 1D6
 
 <img src="https://raw.githubusercontent.com/GirlInPurple/onedsix/master/assets/icon_large.png" alt="1D6 Logo" height="180px" align="right"/>
